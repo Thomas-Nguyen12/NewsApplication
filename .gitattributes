@@ -1,2 +1,8 @@
 train.csv filter=lfs diff=lfs merge=lfs -text
 arvix_data/arvix_dataset.csv filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
+data/X_res.pkl filter=lfs diff=lfs merge=lfs -text
+data/y_res.pkl filter=lfs diff=lfs merge=lfs -text
+_res.pkl filter=lfs diff=lfs merge=lfs -text
+=======
+>>>>>>> cbe3dd226a5256d3ec9498dd10589d1464e408c0
