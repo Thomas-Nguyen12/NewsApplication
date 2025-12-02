@@ -4,6 +4,10 @@ This is a Dash plotly dashboard app containing ML models for multilabel classifi
 The main dashboard script is named "app.py" and can be run in the CLI using: 
 ```python3 app.py```
 
+I have also created a separate streamlit dashboard solely for the ai-text detection model. This is found within the ai_detection_streamlit.py file and can be run using the command: 
+
+```streamlit run ai_detection_streamlit.py```
+
 
 ### Objectives
 
