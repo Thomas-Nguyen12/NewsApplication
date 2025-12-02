@@ -8,19 +8,19 @@ class ai_detector:
     def __init__(self, text:str):
 
         # store input text
-        self.text = pd.DataFrame({'text': [text]})
+        self.text = [text]
 
         # load TF-IDF vectorizer
-        self.vectoriser = joblib.load("ai_vectoriser.pkl")
+        self.vectoriser = joblib.load("arvix_data/ai_vectoriser.pkl")
         
         # removing unecessary special characters
         self.text['text'] = self.text['text'].str.replace("[^a-zA-Z0-9]+", " ", regex=True).str.strip()
 
         # transform text
-        self.text_tfidf = self.vectoriser.transform(self.text['text'])
+        self.text_tfidf = self.vectoriser.transform(self.text)
 
         # load model
-        self.model = joblib.load("ai_detector.pkl")
+        self.model = joblib.load("arvix_data/ai_detector.pkl")
 
 
 
