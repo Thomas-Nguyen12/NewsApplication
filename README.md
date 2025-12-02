@@ -7,9 +7,8 @@ The main dashboard script is named "app.py" and can be run in the CLI using:
 
 ### Objectives
 
-I plan on: 
-- Creating an ML model based on arvix data (listed below) to classify human-written and A.I-generated news articles.
-- Creating ML models to multilabel-classify news articles under news categories.
+1. Creating an ML model based on arvix data (listed below) to classify human-written and A.I-generated news articles.
+2. Creating ML models to multilabel-classify news articles under news categories.
 
 
 Note that: This project is **still in progress** and the documentation is not yet complete
@@ -17,10 +16,11 @@ Note that: This project is **still in progress** and the documentation is not ye
 
 ### Manually sourced data
 
-- Data extracted and processed manually is stored in the Data/ folder
+- For objective 1, Data extracted and processed manually is stored in the Data/ folder
 - This data utilised a scrapy webscraper to extract content from Wikipedia under the url: https://en.wikipedia.org/wiki/Portal:Current_events/ from years 2004 to 2025 inclusive
 
 ### Data Sourced from Arvix
+- For objective 2...
 - Data extracted from "A Comprehensive Dataset for Human vs. AI Generated
 Text Detection" (Roy et al., 2025) from Arvix  is stored within the arvix_data folder
 
