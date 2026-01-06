@@ -49,7 +49,6 @@ class ai_detector:
 
     def explain(self):
         # create SHAP explainer
-        """
         explainer = shap.Explainer(self.model, self.text_tfidf.toarray(), feature_names=self.vectoriser.get_feature_names_out())
 
         # compute SHAP values for the input
@@ -59,7 +58,8 @@ class ai_detector:
         # I can specify different classes using splicing
         shap_plot = shap.plots.waterfall(shap_values[:,:,0][0])
         return shap_plot
-        """
-        pass
+
+    
+
 if __name__ == '__main__':
     print("This is the main file")
