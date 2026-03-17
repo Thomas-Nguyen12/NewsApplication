@@ -44,7 +44,7 @@ class ai_detector:
         prediction_proba = self.model.predict_proba(self.text_tfidf)
         prediction_probabilities = pd.DataFrame(prediction_proba, columns=['human_generated', 'AI_generated'])
         prediction_probabilities_filtered = prediction_probabilities.loc[:, (prediction_probabilities >= 0.5).all()]
-        return prediction_probabilities_filtered.values[0][0]
+        return prediction_probabilities_filtered.values
 
 
     def explain(self):
