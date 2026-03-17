@@ -1,9 +1,8 @@
 import streamlit as st
 from streamlit_shap import st_shap
 from ai_detection import ai_detector
-import shap
 
-# ── Page config ──────────────────────────────────────────────────────────────
+# ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="NewsShield",
     page_icon="🛡️",
@@ -11,318 +10,287 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ── Custom CSS ────────────────────────────────────────────────────────────────
+# ── Styling ───────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
 
-/* ── Root & background ── */
+/* Base */
 html, body, [data-testid="stAppViewContainer"] {
-    background-color: #0d0d0d;
-    color: #e8e0d0;
+    background: #f5f4f0;
+    color: #1a1a1a;
 }
 [data-testid="stHeader"] { background: transparent; }
-[data-testid="stSidebar"] { background: #111; }
-
-/* ── Hide default Streamlit chrome ── */
 #MainMenu, footer { visibility: hidden; }
+* { font-family: 'DM Sans', sans-serif; }
 
-/* ── Global font ── */
-* { font-family: 'IBM Plex Sans', sans-serif; }
-
-/* ── Masthead ── */
-.masthead {
-    border-top: 4px solid #e8e0d0;
-    border-bottom: 1px solid #333;
-    padding: 28px 0 20px;
-    margin-bottom: 0;
+/* Top nav bar */
+.topbar {
+    background: #1a1a1a;
+    padding: 14px 40px;
     display: flex;
-    align-items: baseline;
-    gap: 18px;
+    align-items: center;
+    justify-content: space-between;
+    margin: -1rem -1rem 2rem -1rem;
 }
-.masthead-title {
-    font-family: 'Playfair Display', serif;
-    font-weight: 900;
-    font-size: 3.4rem;
-    letter-spacing: -1px;
-    color: #e8e0d0;
-    margin: 0;
-    line-height: 1;
+.topbar-brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: #f5f4f0;
+    letter-spacing: 0.5px;
 }
-.masthead-version {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.75rem;
+.topbar-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
     color: #666;
     letter-spacing: 2px;
     text-transform: uppercase;
-    margin-bottom: 4px;
 }
-.masthead-tagline {
-    font-family: 'IBM Plex Sans', sans-serif;
+
+/* Hero headline */
+.hero {
+    padding: 12px 0 28px;
+}
+.hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    font-weight: 400;
+    color: #1a1a1a;
+    line-height: 1.1;
+    margin: 0 0 10px;
+}
+.hero p {
+    font-size: 1rem;
+    color: #666;
     font-weight: 300;
-    font-size: 0.9rem;
-    color: #888;
-    letter-spacing: 0.5px;
-    margin-top: 6px;
+    max-width: 560px;
+    line-height: 1.7;
+    margin: 0;
 }
 
-/* ── Divider ── */
-.rule { border: none; border-top: 1px solid #2a2a2a; margin: 24px 0; }
-
-/* ── About blurb ── */
-.about-text {
-    font-size: 0.9rem;
-    line-height: 1.75;
-    color: #999;
-    font-weight: 300;
-    border-left: 2px solid #333;
-    padding-left: 14px;
-}
-.about-text strong { color: #ccc; font-weight: 500; }
-
-/* ── Section labels ── */
-.section-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
+/* Section label */
+.label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: #555;
+    color: #999;
     margin-bottom: 10px;
 }
 
-/* ── Text input override ── */
-[data-testid="stTextArea"] textarea,
-[data-testid="stTextInput"] input {
-    background-color: #161616 !important;
-    border: 1px solid #2e2e2e !important;
-    border-radius: 2px !important;
-    color: #e8e0d0 !important;
-    font-family: 'IBM Plex Sans', sans-serif !important;
-    font-size: 0.92rem !important;
-    caret-color: #e8e0d0;
+/* Thin rule */
+.thin-rule {
+    border: none;
+    border-top: 1px solid #dddbd4;
+    margin: 28px 0;
 }
-[data-testid="stTextArea"] textarea:focus,
-[data-testid="stTextInput"] input:focus {
-    border-color: #666 !important;
+
+/* About text */
+.about-body {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #444;
+    font-weight: 300;
+}
+.about-body strong { color: #1a1a1a; font-weight: 500; }
+
+/* Textarea & input override */
+[data-testid="stTextArea"] textarea {
+    background: #fff !important;
+    border: 1px solid #dddbd4 !important;
+    border-radius: 4px !important;
+    color: #1a1a1a !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 0.95rem !important;
+    box-shadow: none !important;
+}
+[data-testid="stTextArea"] textarea:focus {
+    border-color: #1a1a1a !important;
     box-shadow: none !important;
 }
 
-/* ── Button ── */
-[data-testid="stButton"] > button {
-    background: #e8e0d0 !important;
-    color: #0d0d0d !important;
+/* Primary button */
+[data-testid="stButton"] > button[kind="primary"] {
+    background: #1a1a1a !important;
+    color: #f5f4f0 !important;
     border: none !important;
-    border-radius: 2px !important;
-    font-family: 'IBM Plex Mono', monospace !important;
-    font-size: 0.78rem !important;
+    border-radius: 4px !important;
+    font-family: 'DM Mono', monospace !important;
+    font-size: 0.75rem !important;
     letter-spacing: 2px !important;
     text-transform: uppercase !important;
-    padding: 10px 28px !important;
+    padding: 12px 32px !important;
     font-weight: 500 !important;
-    transition: opacity 0.15s ease !important;
 }
-[data-testid="stButton"] > button:hover { opacity: 0.85 !important; }
-
-/* ── Verdict card ── */
-.verdict-card {
-    border: 1px solid #2a2a2a;
-    background: #111;
-    padding: 24px 28px;
-    border-radius: 2px;
-    position: relative;
-    overflow: hidden;
-}
-.verdict-card.ai::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
-    background: #e05252;
-}
-.verdict-card.human::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
-    background: #52c97a;
-}
-.verdict-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #555;
-    margin-bottom: 8px;
-}
-.verdict-result {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    font-weight: 700;
-    line-height: 1;
-    margin-bottom: 6px;
-}
-.verdict-result.ai-text { color: #e05252; }
-.verdict-result.human-text { color: #52c97a; }
-.verdict-confidence {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.82rem;
-    color: #666;
-}
-.confidence-val { color: #aaa; font-weight: 500; }
-
-/* ── Progress bar (confidence meter) ── */
-.conf-bar-bg {
-    background: #1e1e1e;
-    border-radius: 1px;
-    height: 4px;
-    margin-top: 12px;
-    overflow: hidden;
-}
-.conf-bar-fill {
-    height: 100%;
-    border-radius: 1px;
-    transition: width 0.6s ease;
+[data-testid="stButton"] > button[kind="primary"]:hover {
+    background: #333 !important;
 }
 
-/* ── Checkbox ── */
-[data-testid="stCheckbox"] {
-    font-family: 'IBM Plex Mono', monospace !important;
-    font-size: 0.8rem !important;
-    color: #888 !important;
+/* Verdict card */
+.verdict-wrap {
+    border-radius: 6px;
+    padding: 28px 32px;
+    margin: 4px 0 20px;
+    border: 1px solid transparent;
+}
+.verdict-wrap.ai-card {
+    background: #fff2f2;
+    border-color: #f5c0c0;
+}
+.verdict-wrap.human-card {
+    background: #f0faf4;
+    border-color: #b2dfc4;
+}
+.verdict-icon { font-size: 2rem; margin-bottom: 8px; }
+.verdict-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: #1a1a1a;
+    margin: 0 0 6px;
+}
+.verdict-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: #888;
     letter-spacing: 1px;
 }
-
-/* ── Info strip ── */
-.info-strip {
-    background: #111;
-    border: 1px solid #2a2a2a;
-    border-radius: 2px;
-    padding: 14px 20px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.75rem;
-    color: #555;
-    letter-spacing: 0.5px;
+.conf-bar-track {
+    background: #e0deda;
+    border-radius: 100px;
+    height: 6px;
+    margin-top: 16px;
+    overflow: hidden;
 }
-.info-strip span { color: #888; }
+.conf-bar-fill-ai   { height: 100%; border-radius: 100px; background: #d95f5f; }
+.conf-bar-fill-human { height: 100%; border-radius: 100px; background: #3caa6e; }
 
-/* ── SHAP explanation container ── */
-.shap-wrapper {
-    background: #111;
-    border: 1px solid #2a2a2a;
-    border-radius: 2px;
-    padding: 20px;
-    margin-top: 8px;
+/* SHAP info box */
+.shap-info {
+    background: #fff;
+    border: 1px solid #dddbd4;
+    border-radius: 4px;
+    padding: 14px 18px;
+    font-size: 0.83rem;
+    color: #666;
+    line-height: 1.6;
+    margin-top: 12px;
+}
+.shap-info strong { color: #1a1a1a; }
+
+/* Checkbox label */
+[data-testid="stCheckbox"] label {
+    font-size: 0.88rem !important;
+    color: #555 !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Masthead ──────────────────────────────────────────────────────────────────
+# ── Top nav bar ───────────────────────────────────────────────────────────────
 st.markdown("""
-<div class="masthead">
-  <div>
-    <div class="masthead-version">v1.0 · AI Content Detection</div>
-    <div class="masthead-title">NewsShield</div>
-    <div class="masthead-tagline">Detecting machine-generated text in journalism &amp; media</div>
-  </div>
+<div class="topbar">
+    <span class="topbar-brand">🛡️ NewsShield</span>
+    <span class="topbar-tag">AI Content Detection · v1.0</span>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("<div class='rule'></div>", unsafe_allow_html=True)
+# ── Hero ──────────────────────────────────────────────────────────────────────
+st.markdown("""
+<div class="hero">
+    <h1>Is this article<br>written by AI?</h1>
+    <p>Paste any news article below. NewsShield uses machine learning to detect
+    whether the text was written by a human or generated by an LLM such as
+    ChatGPT or Google Gemini.</p>
+</div>
+""", unsafe_allow_html=True)
 
-# ── Two-column layout: about + image ─────────────────────────────────────────
+st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
+
+# ── About + image ─────────────────────────────────────────────────────────────
 col_img, col_about = st.columns([1, 2], gap="large")
 
 with col_img:
     st.image("ny_times.jpg", use_container_width=True)
 
 with col_about:
+    st.markdown("<div class='label'>About</div>", unsafe_allow_html=True)
     st.markdown("""
-    <div class="section-label">About</div>
-    <div class="about-text">
-        NewsShield analyses news articles and editorial content to identify text
-        generated by <strong>Large Language Models</strong> such as ChatGPT, Google Gemini,
-        and similar systems.<br><br>
-        As AI-generated misinformation becomes harder to distinguish from genuine
-        reporting, tools like this help newsrooms verify authenticity and protect
-        readers from synthetic content masquerading as real journalism.
+    <div class='about-body'>
+        NewsShield analyses editorial content to identify text generated by
+        <strong>Large Language Models</strong>. As synthetic text becomes harder
+        to distinguish from genuine reporting, this tool helps newsrooms verify
+        authenticity and protect readers from AI-generated misinformation.
     </div>
     """, unsafe_allow_html=True)
 
-st.markdown("<div class='rule'></div>", unsafe_allow_html=True)
+st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
 
 # ── Input ─────────────────────────────────────────────────────────────────────
-st.markdown("<div class='section-label'>Input</div>", unsafe_allow_html=True)
-
+st.markdown("<div class='label'>Article Text</div>", unsafe_allow_html=True)
 text = st.text_area(
-    label="Article text",
-    value="",
-    placeholder="Paste a news article or excerpt here…",
-    height=200,
+    label="article",
     label_visibility="collapsed",
+    placeholder="Paste a news article or excerpt here…",
+    height=220,
 )
-
-run = st.button("Analyse Text")
+run = st.button("Analyse Text", type="primary")
 
 # ── Results ───────────────────────────────────────────────────────────────────
 if run and text.strip():
-    st.markdown("<div class='rule'></div>", unsafe_allow_html=True)
-    st.markdown("<div class='section-label'>Results</div>", unsafe_allow_html=True)
+    st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
 
     with st.spinner("Analysing…"):
         detector = ai_detector(text)
         prediction = detector.predict()
         confidence = detector.predict_proba()
 
-    # Determine verdict styling
-    is_ai = "ai" in prediction.lower() or "generated" in prediction.lower()
-    card_class = "ai" if is_ai else "human"
-    result_class = "ai-text" if is_ai else "human-text"
-    bar_color = "#e05252" if is_ai else "#52c97a"
-
-    # Try to extract a numeric confidence value for the bar
+    # Parse confidence
     try:
         conf_num = float(str(confidence).strip().replace("%", ""))
         if conf_num <= 1.0:
             conf_num *= 100
-        bar_width = f"{min(conf_num, 100):.1f}%"
         conf_display = f"{conf_num:.1f}%"
+        bar_pct = f"{min(conf_num, 100):.1f}%"
     except (ValueError, TypeError):
-        bar_width = "0%"
         conf_display = str(confidence)
+        bar_pct = "0%"
 
+    # Determine verdict
+    is_ai = "human" not in prediction.lower()
+    card_class = "ai-card" if is_ai else "human-card"
+    bar_class  = "conf-bar-fill-ai" if is_ai else "conf-bar-fill-human"
+    icon       = "🤖" if is_ai else "✍️"
+    title      = "AI-Generated" if is_ai else "Human-Written"
+    sub        = f"Confidence: {conf_display}"
+
+    st.markdown("<div class='label'>Verdict</div>", unsafe_allow_html=True)
     st.markdown(f"""
-    <div class="verdict-card {card_class}">
-        <div class="verdict-label">Verdict</div>
-        <div class="verdict-result {result_class}">{prediction}</div>
-        <div class="verdict-confidence">
-            Confidence: <span class="confidence-val">{conf_display}</span>
-        </div>
-        <div class="conf-bar-bg">
-            <div class="conf-bar-fill"
-                 style="width:{bar_width}; background:{bar_color};"></div>
+    <div class="verdict-wrap {card_class}">
+        <div class="verdict-icon">{icon}</div>
+        <div class="verdict-title">{title}</div>
+        <div class="verdict-sub">{sub}</div>
+        <div class="conf-bar-track">
+            <div class="{bar_class}" style="width:{bar_pct};"></div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("<div class='rule'></div>", unsafe_allow_html=True)
+    st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
 
     # ── Explanation ───────────────────────────────────────────────────────────
-    st.markdown("<div class='section-label'>Explanation</div>", unsafe_allow_html=True)
-    explain = st.checkbox("Show SHAP feature attribution", value=False)
+    st.markdown("<div class='label'>Explanation</div>", unsafe_allow_html=True)
+    explain = st.checkbox("Show SHAP feature attribution")
 
     if explain:
         with st.spinner("Computing explanation…"):
             explain_plot = detector.explain()
-        st.markdown("<div class='shap-wrapper'>", unsafe_allow_html=True)
-        st_shap(explain_plot, height=350)
-        st.markdown("</div>", unsafe_allow_html=True)
+        st_shap(explain_plot, height=380)
         st.markdown("""
-        <div class="info-strip" style="margin-top:12px;">
-            <span>ℹ</span>&nbsp; Red bars push the prediction toward <span>AI-generated</span>.
-            Blue bars push toward <span>human-written</span>.
-            Bar length indicates feature importance.
+        <div class="shap-info">
+            <strong>How to read this:</strong> Red bars push the prediction toward
+            <em>AI-generated</em>. Blue bars push toward <em>human-written</em>.
+            Bar length reflects each feature's influence on the result.
         </div>
         """, unsafe_allow_html=True)
 
 elif run and not text.strip():
-    st.warning("Please enter some article text before analysing.")
+    st.warning("Please paste some article text before running the analysis.")
