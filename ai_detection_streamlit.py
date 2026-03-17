@@ -1,5 +1,5 @@
 import streamlit as st
-
+from streamlit_shap import st_shap
 # importing the ai module
 from ai_detection import ai_detector 
 
@@ -23,8 +23,16 @@ news_to_classify = ai_detector(text)
 st.write(f"Prediction: {news_to_classify.predict()}... with confidence of {news_to_classify.predict_proba()}")
 
 st.write("Explanation")
+# I should include the explanation as an option
+explain = st.checkbox("Explain the prediction...")
 
-news_to_classify.explain()
+if explain:
+  # I need to show this as a streamlit graph 
+  # the streamlit plot is currently a waterfall plot 
+  explain_plot = news_to_classify.explain()
+  st_shap(explain_plot) 
+
+
 # I can use a textboxgit
 
 
