@@ -9,7 +9,6 @@ pandas==2.3.3
 pip==26.0.1
 plotly==6.3.0
 pluggy==1.6.0
-python==3.12.12
 scikit-learn==1.7.2
 scikit-multilearn==0.2.0
 scikit-optimize==0.10.2
