@@ -16,6 +16,7 @@ async-lru @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_
 attrs @ file:///home/conda/feedstock_root/build_artifacts/attrs_1741918516150/work
 Automat @ file:///home/conda/feedstock_root/build_artifacts/automat_1744877909910/work
 babel @ file:///home/conda/feedstock_root/build_artifacts/babel_1738490167835/work
+backcall==0.2.0
 bcrypt @ file:///Users/runner/miniforge3/conda-bld/bld/rattler-build_bcrypt_1762497792/work
 beautifulsoup4 @ file:///home/conda/feedstock_root/build_artifacts/beautifulsoup4_1744783198182/work
 bleach @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_bleach_1737382993/work
@@ -41,7 +42,6 @@ cryptography @ file:///Users/runner/miniforge3/conda-bld/cryptography-split_1756
 cssselect @ file:///home/conda/feedstock_root/build_artifacts/cssselect_1747322906730/work
 cycler @ file:///home/conda/feedstock_root/build_artifacts/cycler_1733332471406/work
 cymem @ file:///Users/runner/miniforge3/conda-bld/cymem_1763189003291/work
-dash @ file:///home/conda/feedstock_root/build_artifacts/dash_1754906381143/work
 dash @ file:///home/conda/feedstock_root/build_artifacts/dash_1754906381143/work
 datasets @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_datasets_1755878391/work
 debugpy @ file:///Users/runner/miniforge3/conda-bld/bld/rattler-build_debugpy_1758162054/work
@@ -268,6 +268,9 @@ unicodedata2 @ file:///Users/runner/miniforge3/conda-bld/unicodedata2_1763054831
 uri-template @ file:///home/conda/feedstock_root/build_artifacts/uri-template_1733323593477/work/dist
 urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1744323578849/work
 w3lib @ file:///home/conda/feedstock_root/build_artifacts/w3lib_1737998860387/work
+wasabi @ file:///home/conda/feedstock_root/build_artifacts/wasabi_1740630716360/work
+watchdog @ file:///Users/runner/miniforge3/conda-bld/watchdog_1763021736961/work
+wcwidth @ file:///home/conda/feedstock_root/build_artifacts/wcwidth_1733231326287/work
 weasel @ file:///home/conda/feedstock_root/build_artifacts/weasel_1762392851432/work
 webcolors @ file:///home/conda/feedstock_root/build_artifacts/webcolors_1733359735138/work
 webencodings @ file:///home/conda/feedstock_root/build_artifacts/webencodings_1733236011802/work
@@ -278,6 +281,7 @@ widgetsnbextension @ file:///home/conda/feedstock_root/build_artifacts/widgetsnb
 wrapt @ file:///Users/runner/miniforge3/conda-bld/wrapt_1762595009282/work
 xgboost @ file:///home/conda/feedstock_root/build_artifacts/xgboost-split_1758007742820/work/python-package
 xxhash @ file:///Users/runner/miniforge3/conda-bld/python-xxhash_1762516420319/work
+yarg==0.1.9
 yarl @ file:///Users/runner/miniforge3/conda-bld/yarl_1761337051880/work
 zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1748277385522/work
 zope.interface @ file:///Users/runner/miniforge3/conda-bld/bld/rattler-build_zope.interface_1762507598/work
