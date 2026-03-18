@@ -15,18 +15,24 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
 
-/* Base */
-html, body, [data-testid="stAppViewContainer"] {
-    background: #f5f4f0;
-    color: #1a1a1a;
+/* ── Base ── */
+html, body,
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+section.main {
+    background: #0f1117 !important;
+    color: #e2e2e2 !important;
 }
-[data-testid="stHeader"] { background: transparent; }
-#MainMenu, footer { visibility: hidden; }
+[data-testid="stHeader"]       { background: transparent !important; }
+[data-testid="stSidebar"]      { background: #161820 !important; }
+[data-testid="stAppViewBlockContainer"] { background: #0f1117 !important; }
+#MainMenu, footer              { visibility: hidden; }
 * { font-family: 'DM Sans', sans-serif; }
 
-/* Top nav bar */
+/* ── Top nav bar ── */
 .topbar {
-    background: #1a1a1a;
+    background: #161820;
+    border-bottom: 1px solid #2a2d3a;
     padding: 14px 40px;
     display: flex;
     align-items: center;
@@ -36,151 +42,162 @@ html, body, [data-testid="stAppViewContainer"] {
 .topbar-brand {
     font-family: 'DM Serif Display', serif;
     font-size: 1.4rem;
-    color: #f5f4f0;
+    color: #e2e2e2;
     letter-spacing: 0.5px;
 }
 .topbar-tag {
     font-family: 'DM Mono', monospace;
     font-size: 0.7rem;
-    color: #666;
+    color: #4a4f66;
     letter-spacing: 2px;
     text-transform: uppercase;
 }
 
-/* Hero headline */
-.hero {
-    padding: 12px 0 28px;
-}
+/* ── Hero ── */
+.hero { padding: 12px 0 28px; }
 .hero h1 {
     font-family: 'DM Serif Display', serif;
     font-size: 3rem;
     font-weight: 400;
-    color: #1a1a1a;
+    color: #e2e2e2;
     line-height: 1.1;
-    margin: 0 0 10px;
+    margin: 0 0 12px;
 }
 .hero p {
     font-size: 1rem;
-    color: #666;
+    color: #7a7f99;
     font-weight: 300;
     max-width: 560px;
-    line-height: 1.7;
+    line-height: 1.75;
     margin: 0;
 }
 
-/* Section label */
+/* ── Section labels ── */
 .label {
     font-family: 'DM Mono', monospace;
     font-size: 0.65rem;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: #999;
+    color: #4a4f66;
     margin-bottom: 10px;
 }
 
-/* Thin rule */
+/* ── Divider ── */
 .thin-rule {
     border: none;
-    border-top: 1px solid #dddbd4;
+    border-top: 1px solid #1e2130;
     margin: 28px 0;
 }
 
-/* About text */
+/* ── About text ── */
 .about-body {
     font-size: 0.95rem;
     line-height: 1.8;
-    color: #444;
+    color: #7a7f99;
     font-weight: 300;
 }
-.about-body strong { color: #1a1a1a; font-weight: 500; }
+.about-body strong { color: #c8c8d8; font-weight: 500; }
 
-/* Textarea & input override */
+/* ── Textarea ── */
 [data-testid="stTextArea"] textarea {
-    background: #fff !important;
-    border: 1px solid #dddbd4 !important;
-    border-radius: 4px !important;
-    color: #1a1a1a !important;
+    background: #161820 !important;
+    border: 1px solid #2a2d3a !important;
+    border-radius: 6px !important;
+    color: #e2e2e2 !important;
     font-family: 'DM Sans', sans-serif !important;
     font-size: 0.95rem !important;
     box-shadow: none !important;
+    caret-color: #e2e2e2;
 }
 [data-testid="stTextArea"] textarea:focus {
-    border-color: #1a1a1a !important;
-    box-shadow: none !important;
+    border-color: #4a5080 !important;
+    box-shadow: 0 0 0 2px rgba(74,80,128,0.25) !important;
 }
+[data-testid="stTextArea"] textarea::placeholder { color: #3a3f55 !important; }
 
-/* Primary button */
+/* ── Button ── */
 [data-testid="stButton"] > button[kind="primary"] {
-    background: #1a1a1a !important;
-    color: #f5f4f0 !important;
-    border: none !important;
-    border-radius: 4px !important;
+    background: #3d4270 !important;
+    color: #e2e2e2 !important;
+    border: 1px solid #4a5080 !important;
+    border-radius: 6px !important;
     font-family: 'DM Mono', monospace !important;
     font-size: 0.75rem !important;
     letter-spacing: 2px !important;
     text-transform: uppercase !important;
     padding: 12px 32px !important;
     font-weight: 500 !important;
+    transition: background 0.2s ease !important;
 }
 [data-testid="stButton"] > button[kind="primary"]:hover {
-    background: #333 !important;
+    background: #4a5080 !important;
 }
 
-/* Verdict card */
+/* ── Verdict card ── */
 .verdict-wrap {
-    border-radius: 6px;
+    border-radius: 8px;
     padding: 28px 32px;
     margin: 4px 0 20px;
     border: 1px solid transparent;
 }
 .verdict-wrap.ai-card {
-    background: #fff2f2;
-    border-color: #f5c0c0;
+    background: #1f1218;
+    border-color: #5c2a2a;
 }
 .verdict-wrap.human-card {
-    background: #f0faf4;
-    border-color: #b2dfc4;
+    background: #0e1f18;
+    border-color: #1e5c3a;
 }
-.verdict-icon { font-size: 2rem; margin-bottom: 8px; }
-.verdict-title {
+.verdict-icon   { font-size: 2rem; margin-bottom: 10px; }
+.verdict-title  {
     font-family: 'DM Serif Display', serif;
-    font-size: 1.6rem;
-    color: #1a1a1a;
+    font-size: 1.75rem;
+    color: #e2e2e2;
     margin: 0 0 6px;
 }
+.verdict-wrap.ai-card   .verdict-title { color: #f28b82; }
+.verdict-wrap.human-card .verdict-title { color: #81c995; }
 .verdict-sub {
     font-family: 'DM Mono', monospace;
     font-size: 0.78rem;
-    color: #888;
+    color: #4a4f66;
     letter-spacing: 1px;
 }
 .conf-bar-track {
-    background: #e0deda;
+    background: #1e2130;
     border-radius: 100px;
-    height: 6px;
-    margin-top: 16px;
+    height: 5px;
+    margin-top: 18px;
     overflow: hidden;
 }
-.conf-bar-fill-ai   { height: 100%; border-radius: 100px; background: #d95f5f; }
-.conf-bar-fill-human { height: 100%; border-radius: 100px; background: #3caa6e; }
+.conf-bar-fill-ai    { height: 100%; border-radius: 100px; background: #c0392b; }
+.conf-bar-fill-human { height: 100%; border-radius: 100px; background: #27ae60; }
 
-/* SHAP info box */
+/* ── SHAP info box ── */
 .shap-info {
-    background: #fff;
-    border: 1px solid #dddbd4;
-    border-radius: 4px;
+    background: #161820;
+    border: 1px solid #2a2d3a;
+    border-radius: 6px;
     padding: 14px 18px;
     font-size: 0.83rem;
-    color: #666;
-    line-height: 1.6;
+    color: #7a7f99;
+    line-height: 1.65;
     margin-top: 12px;
 }
-.shap-info strong { color: #1a1a1a; }
+.shap-info strong { color: #c8c8d8; }
 
-/* Checkbox label */
+/* ── Checkbox ── */
 [data-testid="stCheckbox"] label {
     font-size: 0.88rem !important;
-    color: #555 !important;
+    color: #7a7f99 !important;
+}
+
+/* ── Warning / info banners ── */
+[data-testid="stAlert"] {
+    background: #161820 !important;
+    border: 1px solid #2a2d3a !important;
+    color: #7a7f99 !important;
+    border-radius: 6px !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -255,12 +272,12 @@ if run and text.strip():
         bar_pct = "0%"
 
     # Determine verdict
-    is_ai = "human" not in prediction.lower()
-    card_class = "ai-card" if is_ai else "human-card"
+    is_ai      = "human" not in prediction.lower()
+    card_class = "ai-card"          if is_ai else "human-card"
     bar_class  = "conf-bar-fill-ai" if is_ai else "conf-bar-fill-human"
-    icon       = "🤖" if is_ai else "✍️"
-    title      = "AI-Generated" if is_ai else "Human-Written"
-    sub        = f"Confidence: {conf_display}"
+    icon       = "🤖"               if is_ai else "✍️"
+    title      = "AI-Generated"     if is_ai else "Human-Written"
+    sub        = f"Confidence · {conf_display}"
 
     st.markdown("<div class='label'>Verdict</div>", unsafe_allow_html=True)
     st.markdown(f"""
@@ -278,19 +295,19 @@ if run and text.strip():
 
     # ── Explanation ───────────────────────────────────────────────────────────
     st.markdown("<div class='label'>Explanation</div>", unsafe_allow_html=True)
-    explain = st.checkbox("Show SHAP feature attribution")
+    
+        
+    explain_plot = detector.explain()  # compute inside spinner
 
-    if explain:
-        with st.spinner("Computing explanation…"):
-            explain_plot = detector.explain()
-        st_shap(explain_plot, height=380)
-        st.markdown("""
-        <div class="shap-info">
-            <strong>How to read this:</strong> Red bars push the prediction toward
-            <em>AI-generated</em>. Blue bars push toward <em>human-written</em>.
-            Bar length reflects each feature's influence on the result.
-        </div>
-        """, unsafe_allow_html=True)
+    # ✅ Render OUTSIDE the spinner block so it isn't cleared
+    st_shap(explain_plot)
+    st.markdown("""
+    <div class="shap-info">
+        <strong>How to read this:</strong> Red bars push the prediction toward
+        <em>human-written</em>. Blue bars push toward <em>AI-generated</em>.
+        Bar length reflects each feature's influence on the result.
+    </div>
+    """, unsafe_allow_html=True)
 
 elif run and not text.strip():
     st.warning("Please paste some article text before running the analysis.")
