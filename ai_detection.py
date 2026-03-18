@@ -59,7 +59,7 @@ class ai_detector:
         shap_plot = shap.plots.waterfall(shap_values[:,:,0][0])
         return shap_plot
 
-    
+
 
 if __name__ == '__main__':
     print("This is the main file")
