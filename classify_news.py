@@ -2,7 +2,7 @@ import joblib
 import shap 
 import pandas as pd 
 import re 
-vectoriser = joblib.load("data/tfidf_vectoriser.pkl") 
+vectoriser = joblib.load("data/tfidf_vectorizer.pkl") 
 
 topics = joblib.load('data/mlb.pkl')
 topic_hashmap = topics.classes_
