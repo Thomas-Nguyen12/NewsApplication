@@ -4,7 +4,7 @@ import pandas as pd
 import re 
 import os 
 
-os.chdir("~/news_project/")
+os.chdir("/Users/thomasnguyen/news_project/")
 
 
 vectoriser = joblib.load("data/tfidf_vectorizer.pkl") 
