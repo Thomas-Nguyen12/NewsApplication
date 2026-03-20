@@ -4,7 +4,8 @@ import pandas as pd
 import re 
 vectoriser = joblib.load("data/tfidf_vectoriser.pkl") 
 
-topic_hashmap = joblib.load('data/topic_hashmap.pkl')
+topics = joblib.load('data/mlb.pkl')
+topic_hashmap = topics.classes_
 model = joblib.load("data/news_topic_classifier.pkl") 
 class classifier: 
     
@@ -23,7 +24,7 @@ class classifier:
     def predict(self):
         # this section will be for predicting the labels
         prediction = self.model.predict(self.text_tfidf)
-        prediction_df = pd.DataFrame(prediction.toarray(), columns=topic_hashmap.keys())
+        prediction_df = pd.DataFrame(prediction, columns=topic_hashmap)
         prediction_filtered = prediction_df.loc[:, (prediction_df == 1).all()]
         
         return prediction_filtered
@@ -33,7 +34,7 @@ class classifier:
     def predict_proba(self): 
         # this section will generate the prediction probabilities 
         predict_proba = self.model.predict_proba(self.text_tfidf) 
-        predict_proba_df = pd.DataFrame(predict_proba.toarray(), columns=topic_hashmap.keys()) 
+        predict_proba_df = pd.DataFrame(predict_proba, columns=topic_hashmap) 
         prediction_filtered = predict_proba_df.loc[:, (predict_proba_df >= 0.5).all()]
         return prediction_filtered
     

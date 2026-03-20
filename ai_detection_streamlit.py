@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_shap import st_shap
 from ai_detection import ai_detector
+from classify_news import classifier
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -155,7 +156,7 @@ section.main {
     color: #e2e2e2;
     margin: 0 0 6px;
 }
-.verdict-wrap.ai-card   .verdict-title { color: #f28b82; }
+.verdict-wrap.ai-card    .verdict-title { color: #f28b82; }
 .verdict-wrap.human-card .verdict-title { color: #81c995; }
 .verdict-sub {
     font-family: 'DM Mono', monospace;
@@ -172,6 +173,69 @@ section.main {
 }
 .conf-bar-fill-ai    { height: 100%; border-radius: 100px; background: #c0392b; }
 .conf-bar-fill-human { height: 100%; border-radius: 100px; background: #27ae60; }
+
+/* ── Topic tags ── */
+.topic-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+}
+.topic-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background: #161e2e;
+    border: 1px solid #2a3a5c;
+    color: #7ab4f5;
+    border-radius: 4px;
+    padding: 6px 14px;
+}
+.topic-none {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: #4a4f66;
+    padding: 8px 0;
+}
+
+/* ── Topic confidence bar ── */
+.topic-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.topic-bar-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: #c8c8d8;
+    width: 220px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.topic-bar-track {
+    flex: 1;
+    background: #1e2130;
+    border-radius: 100px;
+    height: 5px;
+    overflow: hidden;
+}
+.topic-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: #4a80c0;
+}
+.topic-bar-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: #4a4f66;
+    width: 40px;
+    text-align: right;
+    flex-shrink: 0;
+}
 
 /* ── SHAP info box ── */
 .shap-info {
@@ -241,22 +305,24 @@ with col_about:
 
 st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
 
-# ── Input ─────────────────────────────────────────────────────────────────────
-st.markdown("<div class='label'>Article Text</div>", unsafe_allow_html=True)
-text = st.text_area(
-    label="article",
+# ══════════════════════════════════════════════════════════════════════════════
+# SECTION 1 — AI Detection
+# ══════════════════════════════════════════════════════════════════════════════
+st.markdown("<div class='label'>AI Detection — Article Text</div>", unsafe_allow_html=True)
+ai_text = st.text_area(
+    label="ai_article",
     label_visibility="collapsed",
     placeholder="Paste a news article or excerpt here…",
     height=220,
+    key="ai_input",
 )
-run = st.button("Analyse Text", type="primary")
+run_ai = st.button("Analyse Text", type="primary", key="run_ai")
 
-# ── Results ───────────────────────────────────────────────────────────────────
-if run and text.strip():
+if run_ai and ai_text.strip():
     st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
 
     with st.spinner("Analysing…"):
-        detector = ai_detector(text)
+        detector   = ai_detector(ai_text)
         prediction = detector.predict()
         confidence = detector.predict_proba()
 
@@ -266,12 +332,11 @@ if run and text.strip():
         if conf_num <= 1.0:
             conf_num *= 100
         conf_display = f"{conf_num:.1f}%"
-        bar_pct = f"{min(conf_num, 100):.1f}%"
+        bar_pct      = f"{min(conf_num, 100):.1f}%"
     except (ValueError, TypeError):
         conf_display = str(confidence)
-        bar_pct = "0%"
+        bar_pct      = "0%"
 
-    # Determine verdict
     is_ai      = "human" not in prediction.lower()
     card_class = "ai-card"          if is_ai else "human-card"
     bar_class  = "conf-bar-fill-ai" if is_ai else "conf-bar-fill-human"
@@ -293,13 +358,8 @@ if run and text.strip():
 
     st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
 
-    # ── Explanation ───────────────────────────────────────────────────────────
     st.markdown("<div class='label'>Explanation</div>", unsafe_allow_html=True)
-    
-        
-    explain_plot = detector.explain()  # compute inside spinner
-
-    # ✅ Render OUTSIDE the spinner block so it isn't cleared
+    explain_plot = detector.explain()
     st_shap(explain_plot)
     st.markdown("""
     <div class="shap-info">
@@ -309,5 +369,80 @@ if run and text.strip():
     </div>
     """, unsafe_allow_html=True)
 
-elif run and not text.strip():
+elif run_ai and not ai_text.strip():
     st.warning("Please paste some article text before running the analysis.")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SECTION 2 — Topic Classification
+# ══════════════════════════════════════════════════════════════════════════════
+st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
+
+st.markdown("""
+<div class="hero" style="padding: 0 0 20px;">
+    <h1 style="font-size:2.2rem;">What is this<br>article about?</h1>
+    <p>Paste a news article below and the classifier will predict which
+    topics it belongs to across up to 11 categories.</p>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("<div class='label'>Topic Classification — Article Text</div>", unsafe_allow_html=True)
+topic_text = st.text_area(
+    label="topic_article",
+    label_visibility="collapsed",
+    placeholder="Paste a news article or excerpt here…",
+    height=220,
+    key="topic_input",
+)
+run_topic = st.button("Classify Topics", type="primary", key="run_topic")
+
+if run_topic and topic_text.strip():
+    st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
+
+    with st.spinner("Classifying…"):
+        clf        = classifier(text=topic_text)
+        labels_df  = clf.predict()
+        proba_df   = clf.predict_proba()
+
+    topics_found = list(labels_df.columns)
+
+    # ── Predicted topic tags ──────────────────────────────────────────────────
+    st.markdown("<div class='label'>Predicted Topics</div>", unsafe_allow_html=True)
+
+    if topics_found:
+        tags_html = "".join(
+            f'<span class="topic-tag">{t}</span>' for t in topics_found
+        )
+        st.markdown(
+            f'<div class="topic-tag-row">{tags_html}</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            '<div class="topic-none">No topics matched the confidence threshold.</div>',
+            unsafe_allow_html=True,
+        )
+
+    # ── Confidence scores ─────────────────────────────────────────────────────
+    if not proba_df.empty:
+        st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
+        st.markdown("<div class='label'>Confidence Scores</div>", unsafe_allow_html=True)
+
+        bars_html = ""
+        for topic in proba_df.columns:
+            score   = float(proba_df[topic].iloc[0])
+            pct     = f"{score * 100:.1f}%"
+            fill_w  = f"{min(score * 100, 100):.1f}%"
+            bars_html += f"""
+            <div class="topic-bar-row">
+                <div class="topic-bar-label">{topic}</div>
+                <div class="topic-bar-track">
+                    <div class="topic-bar-fill" style="width:{fill_w};"></div>
+                </div>
+                <div class="topic-bar-pct">{pct}</div>
+            </div>"""
+
+        st.markdown(bars_html, unsafe_allow_html=True)
+
+elif run_topic and not topic_text.strip():
+    st.warning("Please paste some article text before classifying.")
