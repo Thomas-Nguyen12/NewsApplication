@@ -2,6 +2,11 @@ import joblib
 import shap 
 import pandas as pd 
 import re 
+import os 
+
+os.chdir("~/news_project/")
+
+
 vectoriser = joblib.load("data/tfidf_vectorizer.pkl") 
 
 topics = joblib.load('data/mlb.pkl')
