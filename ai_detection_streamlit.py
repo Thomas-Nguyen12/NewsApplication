@@ -382,7 +382,7 @@ st.markdown("""
 <div class="hero" style="padding: 0 0 20px;">
     <h1 style="font-size:2.2rem;">What is this<br>article about?</h1>
     <p>Paste a news article below and the classifier will predict which
-    topics it belongs to across up to 11 categories.</p>
+    topics it belongs to across up to 10 categories.</p>
 </div>
 """, unsafe_allow_html=True)
 
