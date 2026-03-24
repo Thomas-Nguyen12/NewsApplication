@@ -7,11 +7,11 @@ import os
 
 
 
-vectoriser = joblib.load("data/tfidf_vectorizer.pkl") 
+vectoriser = joblib.load("models/news_topic_classifier/tfidf_vectorizer.pkl") 
 
-topics = joblib.load('data/mlb.pkl')
+topics = joblib.load('models/news_topic_classifier/mlb.pkl')
 topic_hashmap = topics.classes_
-model = joblib.load("models/news_topic_classifier.pkl") 
+model = joblib.load("models/news_topic_classifier/news_topic_classifier.pkl") 
 class classifier: 
     
     def __init__(self, text:str): 
