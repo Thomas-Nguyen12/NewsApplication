@@ -4,7 +4,7 @@ import numpy as np
 import shap
 import re
 vectoriser = joblib.load("arvix_data/ai_vectoriser.pkl")
-model = joblib.load("arvix_data/ai_detector.pkl")
+model = joblib.load("models/ai_detector.pkl")
 class ai_detector:
     def __init__(self, text:str):
 

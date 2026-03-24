@@ -11,7 +11,7 @@ vectoriser = joblib.load("data/tfidf_vectorizer.pkl")
 
 topics = joblib.load('data/mlb.pkl')
 topic_hashmap = topics.classes_
-model = joblib.load("data/news_topic_classifier.pkl") 
+model = joblib.load("models/news_topic_classifier.pkl") 
 class classifier: 
     
     def __init__(self, text:str): 
