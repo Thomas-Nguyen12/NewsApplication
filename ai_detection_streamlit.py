@@ -459,8 +459,8 @@ if run_topic and topic_text.strip():
             fill_w  = f"{min(score * 100, 100):.1f}%"
 
             if score >= 0.90:
-                fit_label = "Strong fit"
-                fit_color = "#81c995"
+                fit_label = "Very Strong fit"
+                fit_color = "#07f149"
 
             elif score >= 0.7 and score < 0.9:
                 fit_label="Strong fit"
@@ -493,7 +493,7 @@ if run_topic and topic_text.strip():
             how strongly the model associates the article with that topic category.
             Scores above <strong>70%</strong> indicate the topic is a clear and
             dominant theme. Scores between <strong>50–70%</strong> suggest the
-            topic is present but secondary or mixed with other themes. Scores
+            topic is present but weakly represented or mixed with other themes. Scores
             below <strong>50%</strong> mean the topic is weakly represented —
             only topics that pass the detection threshold (50%) appear as predicted tags above.
         </div>
