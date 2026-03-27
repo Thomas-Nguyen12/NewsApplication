@@ -49,7 +49,7 @@ class ai_detector:
 
     def explain(self):
         # create SHAP explainer
-        explainer = shap.Explainer(self.model, self.text_tfidf.toarray(), feature_names=self.vectoriser.get_feature_names_out())
+        explainer = shap.TreeExplainer(self.model, self.text_tfidf.toarray(), feature_names=self.vectoriser.get_feature_names_out())
 
         # compute SHAP values for the input
         shap_values = explainer(self.text_tfidf.toarray())
