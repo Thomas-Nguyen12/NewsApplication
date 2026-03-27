@@ -458,10 +458,14 @@ if run_topic and topic_text.strip():
             pct     = f"{score * 100:.1f}%"
             fill_w  = f"{min(score * 100, 100):.1f}%"
 
-            if score >= 0.70:
+            if score >= 0.90:
                 fit_label = "Strong fit"
                 fit_color = "#81c995"
-            elif score >= 0.40:
+
+            elif score >= 0.7 and score < 0.9:
+                fit_label="Strong fit"
+                fit_color="#90ee90"
+            elif score >= 0.50 and score <0.7:
                 fit_label = "Partial fit"
                 fit_color = "#f5c842"
             else:
@@ -488,10 +492,10 @@ if run_topic and topic_text.strip():
             <strong>What do these confidence scores mean?</strong> Each bar shows
             how strongly the model associates the article with that topic category.
             Scores above <strong>70%</strong> indicate the topic is a clear and
-            dominant theme. Scores between <strong>40–70%</strong> suggest the
+            dominant theme. Scores between <strong>50–70%</strong> suggest the
             topic is present but secondary or mixed with other themes. Scores
-            below <strong>40%</strong> mean the topic is weakly represented —
-            only topics that pass the detection threshold appear as predicted tags above.
+            below <strong>50%</strong> mean the topic is weakly represented —
+            only topics that pass the detection threshold (50%) appear as predicted tags above.
         </div>
         """, unsafe_allow_html=True)
 
