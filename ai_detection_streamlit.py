@@ -465,7 +465,7 @@ if run_topic and topic_text.strip():
             elif score >= 0.7 and score < 0.9:
                 fit_label="Strong fit"
                 fit_color="#90ee90"
-            elif score >= 0.50 and score <0.7:
+            elif score >= 0.60 and score <0.7:
                 fit_label = "Partial fit"
                 fit_color = "#f5c842"
             else:
