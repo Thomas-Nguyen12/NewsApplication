@@ -5,7 +5,7 @@ import shap
 import re
 vectoriser = joblib.load("models/ai_detector/ai_vectoriser.pkl")
 model = joblib.load("models/ai_detector/ai_detector.pkl")
-X_train_tfidf = joblib.load("arvix_data/X_train_tfidf.pkl")
+
 class ai_detector:
     def __init__(self, text:str):
 
