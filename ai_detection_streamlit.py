@@ -390,7 +390,7 @@ if run_ai and ai_text.strip():
     <div class="shap-info">
         The Graph shows which words contributed towards the model's prediction. <strong>How to read this</strong>: Red bars push toward the <strong>model's prediction</strong>. </strong> Blue bars push the prediction toward
         <em>the opposite direction</em>. For example, if the prediction is <strong>AI-generated</strong>, red bars show words that made the model believe the article was <strong>AI-generated</strong>, whereas blue bars pushed towards a <strong>human-generated</strong> prediction.
-        Bar length reflects each feature's influence on the result. 
+        Bar length reflects each feature's influence on the result. If the values on the left of the word is zero, this can either mean that the word is highly frequent and has low importance, or was not present within the training data of the model, and was subsequently ignored.
     </div>
     """, unsafe_allow_html=True)
 
