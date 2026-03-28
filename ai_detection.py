@@ -63,7 +63,12 @@ class ai_detector:
 
         # display the force plot
         # I can specify different classes using splicing
-        shap_plot = shap.plots.waterfall(shap_values[:,:,0][0])
+        prediction = model.predict(self.text_tfidf)[0]
+        if prediction == 0:
+
+            shap_plot = shap.plots.waterfall(shap_values[:,:,0][0])
+        else:
+            shap_plot = shap.plots.waterfall(shap_values[:,:,1][0])
         return shap_plot
 
 

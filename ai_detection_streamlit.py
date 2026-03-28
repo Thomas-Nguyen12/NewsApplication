@@ -388,9 +388,9 @@ if run_ai and ai_text.strip():
     st_shap(explain_plot)
     st.markdown("""
     <div class="shap-info">
-        <strong>How to read this:</strong> Red bars push the prediction toward
-        <em>human-written</em>. Blue bars push toward <em>AI-generated</em>.
-        Bar length reflects each feature's influence on the result.
+        The Graph shows which words contributed towards the model's prediction. <strong>How to read this</strong>: Red bars push toward the <strong>model's prediction</strong>. </strong> Blue bars push the prediction toward
+        <em>the opposite direction</em>. For example, if the prediction is <strong>AI-generated</strong>, red bars show words that made the model believe the article was <strong>AI-generated</strong>, whereas blue bars pushed towards a <strong>human-generated</strong> prediction.
+        Bar length reflects each feature's influence on the result. 
     </div>
     """, unsafe_allow_html=True)
 
