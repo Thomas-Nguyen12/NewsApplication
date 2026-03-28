@@ -5,6 +5,7 @@ import shap
 import re
 vectoriser = joblib.load("models/ai_detector/ai_vectoriser.pkl")
 model = joblib.load("models/ai_detector/ai_detector.pkl")
+X_train_tfidf = joblib.load("arvix_data/X_train_tfidf.pkl")
 class ai_detector:
     def __init__(self, text:str):
 
@@ -49,10 +50,16 @@ class ai_detector:
 
     def explain(self):
         # create SHAP explainer
-        explainer = shap.TreeExplainer(self.model, self.text_tfidf.toarray(), feature_names=self.vectoriser.get_feature_names_out())
+        feature_names=vectoriser.get_feature_names_out()
+        input_df = pd.DataFrame(self.text_tfidf.toarray(), columns=feature_names)
+        explainer = shap.TreeExplainer(self.model)
 
         # compute SHAP values for the input
-        shap_values = explainer(self.text_tfidf.toarray())
+
+
+
+
+        shap_values = explainer(input_df)
 
         # display the force plot
         # I can specify different classes using splicing

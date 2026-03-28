@@ -380,15 +380,20 @@ if run_ai and ai_text.strip():
     st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
 
     st.markdown("<div class='label'>Explanation</div>", unsafe_allow_html=True)
-    explain_plot = detector.explain()
-    st_shap(explain_plot)
-    st.markdown("""
-    <div class="shap-info">
-        <strong>How to read this:</strong> Red bars push the prediction toward
-        <em>human-written</em>. Blue bars push toward <em>AI-generated</em>.
-        Bar length reflects each feature's influence on the result.
-    </div>
-    """, unsafe_allow_html=True)
+
+    explaination_check_box = st.checkbox("Explanation")
+    if explaination_check_box:
+        st.write("Explaining...")
+        explain_plot = detector.explain()
+        st_shap(explain_plot)
+        st.markdown("""
+        <div class="shap-info">
+            <strong>How to read this:</strong> Red bars push the prediction toward
+            <em>human-written</em>. Blue bars push toward <em>AI-generated</em>.
+            Bar length reflects each feature's influence on the result.
+        </div>
+        """, unsafe_allow_html=True)
+    
 
 elif run_ai and not ai_text.strip():
     st.warning("Please paste some article text before running the analysis.")
