@@ -40,7 +40,7 @@ Trains a binary classifier to distinguish human-written news articles from AI-ge
 
 - **Data source:** *A Comprehensive Dataset for Human vs. AI Generated Text Detection* (Roy et al., 2025)
 - **Storage:** Raw and processed data is stored in the `arvix_data/` directory
-- **Model artefacts:** `models/`
+- **Model artefacts:** `models/ai_detector`
 
 ---
 
@@ -50,6 +50,7 @@ Extends a time-series forecasting model for stock prices by incorporating financ
 
 - **Data source:** Financial phrasebank from *Good Debt or Bad Debt: Detecting Semantic Orientations in Economic Texts* (Malo et al., 2013)
 - **Storage:** Data is stored in the `sentiment_analysis_data/` directory
+- **Model artefacts:** `models/sentiment_analyzer` 
 
 ---
 
