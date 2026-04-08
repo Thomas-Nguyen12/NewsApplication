@@ -2,6 +2,8 @@
 
 A machine learning pipeline for news analysis, combining AI-generated text detection, multi-label topic classification, and sentiment-driven stock price forecasting.
 
+**Please Note:** The technical documentation for the Streamlit Dashboard - NewsShield_Documentation.pdf - is not complete and is still being updated.
+
 **Live Demo:** [News Shield Dashboard](https://newsshield.streamlit.app)
 
 ```bash
