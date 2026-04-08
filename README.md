@@ -40,7 +40,7 @@ Trains a binary classifier to distinguish human-written news articles from AI-ge
 
 - **Data source:** *A Comprehensive Dataset for Human vs. AI Generated Text Detection* (Roy et al., 2025)
 - **Storage:** Raw and processed data is stored in the `arvix_data/` directory
-- **Model artefacts:** `models/ai_detector`
+- **Model artefacts:** `models/`
 
 ---
 
@@ -50,7 +50,6 @@ Extends a time-series forecasting model for stock prices by incorporating financ
 
 - **Data source:** Financial phrasebank from *Good Debt or Bad Debt: Detecting Semantic Orientations in Economic Texts* (Malo et al., 2013)
 - **Storage:** Data is stored in the `sentiment_analysis_data/` directory
-- **Model artefacts:** `models/sentiment_analyzer` 
 
 ---
 
@@ -58,17 +57,52 @@ Extends a time-series forecasting model for stock prices by incorporating financ
 
 ```
 news_project/
-├── data/                          # Topic classification datasets
-├── arvix_data/                    # AI detection datasets
-├── sentiment_analysis_data/       # Sentiment & stock forecasting data
+├── arvix_data/                          # AI detection datasets
+│   ├── arvix_dataset.csv
+│   ├── data_formatted.csv
+│   └── X.csv
+├── data/                                # Topic classification datasets
+│   ├── raw/
+│   │   └── scraped_news_2004_2025.csv
+│   ├── clean_df.csv
+│   ├── cleaned_df.csv
+│   └── news_data_ready_to_plot.csv
 ├── models/
-│   ├── news_topic_classifier/     # Trained classifier + TF-IDF vectoriser
-│   └── sentiment_analyser/        # Sentiment model artefacts
-├── notebooks/                     # Exploratory analysis notebooks
-├── classify_news.py               # Topic classification pipeline
-├── ai_detection.py                # AI detection pipeline
-├── ai_detection_streamlit.py      # Streamlit dashboard
-└── sentiment_analyser.py          # Sentiment analysis pipeline
+│   ├── ai_detector/                     # AI detection model artefacts
+│   │   ├── ai_detector.pkl
+│   │   └── ai_vectoriser.pkl
+│   ├── news_topic_classifier/           # Topic classifier artefacts
+│   │   ├── mlb.pkl
+│   │   ├── news_topic_classifier.pkl
+│   │   └── tfidf_vectorizer.pkl
+│   └── sentiment_analyser/             # Sentiment model artefacts
+│       ├── sentiment_analyser.pkl
+│       └── sentiment_vectoriser.pkl
+├── news_scraper/                        # Scrapy web scraper
+│   ├── news_scraper/
+│   │   ├── spiders/
+│   │   │   └── scraper.py
+│   │   ├── items.py
+│   │   ├── middlewares.py
+│   │   ├── pipelines.py
+│   │   └── settings.py
+│   └── scrapy.cfg
+├── notebooks/                           # Exploratory analysis notebooks
+│   ├── analyse_clean_df.ipynb
+│   ├── fake_news.ipynb
+│   ├── improve_model.ipynb
+│   └── sentiment_analysis.ipynb
+├── sentiment_analysis_data/             # Sentiment & stock forecasting data
+│   └── sentiment_data.csv
+├── ai_detection.py                      # AI detection pipeline
+├── ai_detection_streamlit.py            # Streamlit dashboard
+├── classify_news.py                     # Topic classification pipeline
+├── sentiment_analyser.py                # Sentiment analysis pipeline
+├── NewsShield_Documentation.docx        # Project documentation
+├── NewsShield_Documentation.pdf
+├── ny_times.jpg
+├── requirements.txt
+└── README.md
 ```
 
 ---
