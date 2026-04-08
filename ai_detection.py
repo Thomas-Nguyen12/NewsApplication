@@ -6,7 +6,7 @@ import re
 vectoriser = joblib.load("models/ai_detector/ai_vectoriser.pkl")
 model = joblib.load("models/ai_detector/ai_detector.pkl")
 
-class ai_detector:
+class classifier:
     def __init__(self, text:str):
 
         # store input text
@@ -17,14 +17,13 @@ class ai_detector:
         
         
         # removing unecessary special characters
-        self.vectoriser = vectoriser
-        self.model = model 
+       
         
         
 
         # transform text
         self.text_list = [self.text]
-        self.text_tfidf = self.vectoriser.transform(self.text_list)
+        self.text_tfidf = vectoriser.transform(self.text_list)
 
         # load model
         
@@ -32,7 +31,7 @@ class ai_detector:
 
 
     def predict(self):
-        prediction = self.model.predict(self.text_tfidf)
+        prediction = model.predict(self.text_tfidf)
         if prediction == 0: 
             return "This is likely a human generated text"
         
@@ -42,7 +41,7 @@ class ai_detector:
 
 
     def predict_proba(self):
-        prediction_proba = self.model.predict_proba(self.text_tfidf)
+        prediction_proba = model.predict_proba(self.text_tfidf)
         prediction_probabilities = pd.DataFrame(prediction_proba, columns=['human_generated', 'AI_generated'])
         prediction_probabilities_filtered = prediction_probabilities.loc[:, (prediction_probabilities >= 0.5).all()]
         return prediction_probabilities_filtered.values[0][0]
@@ -52,7 +51,7 @@ class ai_detector:
         # create SHAP explainer
         feature_names=vectoriser.get_feature_names_out()
         input_df = pd.DataFrame(self.text_tfidf.toarray(), columns=feature_names)
-        explainer = shap.TreeExplainer(self.model)
+        explainer = shap.TreeExplainer(model)
 
         # compute SHAP values for the input
 

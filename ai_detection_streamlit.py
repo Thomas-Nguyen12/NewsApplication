@@ -4,7 +4,7 @@ os.environ["USE_TORCH"] = "1"
 
 import streamlit as st
 from streamlit_shap import st_shap
-from ai_detection import ai_detector
+from ai_detection import classifier
 from classify_news import classifier
 
 # ── Page config ───────────────────────────────────────────────────────────────

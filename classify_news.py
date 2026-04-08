@@ -11,7 +11,8 @@ vectoriser = joblib.load("models/news_topic_classifier/tfidf_vectorizer.pkl")
 
 topics = joblib.load('models/news_topic_classifier/mlb.pkl')
 topic_hashmap = topics.classes_
-model = joblib.load("models/news_topic_classifier/news_topic_classifier.pkl") 
+model = joblib.load("models/news_topic_classifier/news_topic_classifier.pkl")
+model = model.best_estimator_
 class classifier: 
     
     def __init__(self, text:str): 
@@ -45,15 +46,15 @@ class classifier:
     
     
     def explain(self): 
-        """
-        print (f"model: {self.model}")
-        explainer = shap.Explainer(self.model.predict_proba, feature_names=self.vectoriser.get_feature_names_out())
-        shap_values = explainer(self.text_tfidf.toarray())
-        
-        # bear in mind, you can specify different classes using 
-        bar_plot = shap.plots.bar(shap_values[:,:,0][0])
-        return bar_plot
-        """
-        pass
+        feature_names=vectoriser.get_feature_names_out()
+        input_df = pd.DataFrame(self.text_tfidf.toarray(), columns=feature_names)
+        explainer = shap.Explainer(self.model) 
+        shap_values=explainer(input_df)
+        prediction = self.model.predict(self.text_tfidf)[0]
+
+
+        shap_plot = shap.plots.waterfall(shap_values[:,:,prediction][0])
+
+        # the shap explainer should return the class  
     
      
