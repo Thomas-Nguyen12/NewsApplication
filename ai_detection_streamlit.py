@@ -2,13 +2,20 @@ import os
 os.environ["USE_TF"] = "0"
 os.environ["USE_TORCH"] = "1"
 
-
 import streamlit as st
 from streamlit_shap import st_shap
-from scripts.ai_detection import ai_detector 
-from scripts.classify_news import classifier
 
 
+# ── Lazy cached model loaders ─────────────────────────────────────────────────
+@st.cache_resource(show_spinner="Loading detection model…")
+def load_ai_detector():
+    from scripts.ai_detection import ai_detector
+    return ai_detector
+
+@st.cache_resource(show_spinner="Loading classifier model…")
+def load_classifier():
+    from scripts.classify_news import classifier
+    return classifier
 
 
 # ── Page config ───────────────────────────────────────────────────────────────
@@ -335,9 +342,10 @@ if run_ai and ai_text.strip():
     st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
 
     with st.spinner("Analysing…"):
-        detector   = ai_detector(ai_text)
-        prediction = detector.predict()
-        confidence = detector.predict_proba()
+        ai_detector = load_ai_detector()
+        detector    = ai_detector(ai_text)
+        prediction  = detector.predict()
+        confidence  = detector.predict_proba()
 
     # Parse confidence
     try:
@@ -385,19 +393,16 @@ if run_ai and ai_text.strip():
 
     st.markdown("<div class='label'>Explanation</div>", unsafe_allow_html=True)
 
-    
-    
     st.write("Explaining...")
     explain_plot = detector.explain()
     st_shap(explain_plot)
     st.markdown("""
     <div class="shap-info">
-        The Graph shows which words contributed towards the model's prediction. <strong>How to read this</strong>: Red bars push toward the <strong>model's prediction</strong>. </strong> Blue bars push the prediction toward
+        The Graph shows which words contributed towards the model's prediction. <strong>How to read this</strong>: Red bars push toward the <strong>model's prediction</strong>. Blue bars push the prediction toward
         <em>the opposite direction</em>. For example, if the prediction is <strong>AI-generated</strong>, red bars show words that made the model believe the article was <strong>AI-generated</strong>, whereas blue bars pushed towards a <strong>human-generated</strong> prediction.
         Bar length reflects each feature's influence on the result. If the values on the left of the word is zero, this can either mean that the word is highly frequent and has low importance, or was not present within the training data of the model, and was subsequently ignored. E[f(x)] shows the model's baseline prediction, without any words being used. f(x) shows the model's prediction based on the input text.
     </div>
     """, unsafe_allow_html=True)
-
 
 elif run_ai and not ai_text.strip():
     st.warning("Please paste some article text before running the analysis.")
@@ -430,6 +435,7 @@ if run_topic and topic_text.strip():
     st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
 
     with st.spinner("Classifying…"):
+        classifier = load_classifier()
         clf        = classifier(text=topic_text)
         labels_df  = clf.predict()
         proba_df   = clf.predict_proba()
@@ -470,11 +476,10 @@ if run_topic and topic_text.strip():
             if score >= 0.90:
                 fit_label = "Very Strong fit"
                 fit_color = "#07f149"
-
             elif score >= 0.7 and score < 0.9:
-                fit_label="Strong fit"
-                fit_color="#90ee90"
-            elif score >= 0.60 and score <0.7:
+                fit_label = "Strong fit"
+                fit_color = "#90ee90"
+            elif score >= 0.60 and score < 0.7:
                 fit_label = "Partial fit"
                 fit_color = "#f5c842"
             else:
@@ -510,4 +515,3 @@ if run_topic and topic_text.strip():
 
 elif run_topic and not topic_text.strip():
     st.warning("Please paste some article text before classifying.")
-
