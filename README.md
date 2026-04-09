@@ -56,53 +56,22 @@ Extends a time-series forecasting model for stock prices by incorporating financ
 ## Project Structure
 
 ```
-news_project/
-├── arvix_data/                          # AI detection datasets
-│   ├── arvix_dataset.csv
-│   ├── data_formatted.csv
-│   └── X.csv
-├── data/                                # Topic classification datasets
-│   ├── raw/
-│   │   └── scraped_news_2004_2025.csv
-│   ├── clean_df.csv
-│   ├── cleaned_df.csv
-│   └── news_data_ready_to_plot.csv
-├── models/
-│   ├── ai_detector/                     # AI detection model artefacts
-│   │   ├── ai_detector.pkl
-│   │   └── ai_vectoriser.pkl
-│   ├── news_topic_classifier/           # Topic classifier artefacts
-│   │   ├── mlb.pkl
-│   │   ├── news_topic_classifier.pkl
-│   │   └── tfidf_vectorizer.pkl
-│   └── sentiment_analyser/             # Sentiment model artefacts
-│       ├── sentiment_analyser.pkl
-│       └── sentiment_vectoriser.pkl
-├── news_scraper/                        # Scrapy web scraper
-│   ├── news_scraper/
-│   │   ├── spiders/
-│   │   │   └── scraper.py
-│   │   ├── items.py
-│   │   ├── middlewares.py
-│   │   ├── pipelines.py
-│   │   └── settings.py
-│   └── scrapy.cfg
-├── notebooks/                           # Exploratory analysis notebooks
-│   ├── analyse_clean_df.ipynb
-│   ├── fake_news.ipynb
-│   ├── improve_model.ipynb
-│   └── sentiment_analysis.ipynb
-├── sentiment_analysis_data/             # Sentiment & stock forecasting data
-│   └── sentiment_data.csv
-├── ai_detection.py                      # AI detection pipeline
-├── ai_detection_streamlit.py            # Streamlit dashboard
-├── classify_news.py                     # Topic classification pipeline
-├── sentiment_analyser.py                # Sentiment analysis pipeline
-├── NewsShield_Documentation.docx        # Project documentation
-├── NewsShield_Documentation.pdf
-├── ny_times.jpg
-├── requirements.txt
-└── README.md
+.
+├── arvix_data
+├── data
+│   └── raw
+├── documentation
+├── images
+├── models
+│   ├── ai_detector
+│   ├── news_topic_classifier
+│   └── sentiment_analyser
+├── news_scraper
+│   └── news_scraper
+│       └── spiders
+├── notebooks
+├── scripts
+└── sentiment_analysis_data
 ```
 
 ---
