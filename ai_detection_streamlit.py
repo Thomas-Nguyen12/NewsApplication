@@ -305,7 +305,7 @@ st.markdown("<div class='thin-rule'></div>", unsafe_allow_html=True)
 col_img, col_about = st.columns([1, 2], gap="large")
 
 with col_img:
-    st.image("ny_times.jpg", use_container_width=True)
+    st.image("images/ny_times.jpg", use_container_width=True)
 
 with col_about:
     st.markdown("<div class='label'>About</div>", unsafe_allow_html=True)
