@@ -2,7 +2,7 @@ import os
 os.environ["USE_TF"] = "0"
 os.environ["USE_TORCH"] = "1"
 import sys
-sys.path.append("scripts/")
+sys.path.append("./scripts/")
 
 
 import streamlit as st
