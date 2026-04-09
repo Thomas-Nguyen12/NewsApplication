@@ -1,4 +1,4 @@
-iterstrat==0.1.9
+iterative-stratification==0.1.9
 imbalanced-learn==0.14.1
 markdown==3.10
 markdown-it-py==4.0.0
