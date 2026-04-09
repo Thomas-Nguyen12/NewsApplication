@@ -1,11 +1,17 @@
 import os
 os.environ["USE_TF"] = "0"
 os.environ["USE_TORCH"] = "1"
+import sys
+sys.path.append("scripts/")
+
 
 import streamlit as st
 from streamlit_shap import st_shap
-from ai_detection import classifier
+from ai_detection import ai_detector 
 from classify_news import classifier
+
+
+
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
