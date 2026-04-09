@@ -4,14 +4,20 @@ import pandas as pd
 import re 
 import os 
 
+# Instead of this:
+# model = joblib.load("models/news_topic_classifier/news_topic_classifier.pkl")
+
+# Use this:
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+model = joblib.load(os.path.join(BASE_DIR, "models", "news_topic_classifier", "news_topic_classifier.pkl"))
 
 
 
-vectoriser = joblib.load("models/news_topic_classifier/tfidf_vectorizer.pkl") 
+vectoriser = joblib.load(os.path.join(BASE_DIR, "models/news_topic_classifier/tfidf_vectorizer.pkl")) 
 
-topics = joblib.load('models/news_topic_classifier/mlb.pkl')
+
+topics = joblib.load(os.path.join(BASE_DIR, 'models/news_topic_classifier/mlb.pkl'))
 topic_hashmap = topics.classes_
-model = joblib.load("models/news_topic_classifier/news_topic_classifier.pkl")
 model = model.best_estimator_
 class classifier: 
     

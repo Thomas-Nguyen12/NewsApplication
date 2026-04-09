@@ -3,8 +3,17 @@ import joblib
 import numpy as np
 import shap
 import re
-vectoriser = joblib.load("models/ai_detector/ai_vectoriser.pkl")
-model = joblib.load("models/ai_detector/ai_detector.pkl")
+import os
+import joblib
+
+# Instead of this:
+# model = joblib.load("models/news_topic_classifier/news_topic_classifier.pkl")
+
+# Use this:
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+vectoriser = joblib.load(os.path.join(BASE_DIR, "models/ai_detector/ai_vectoriser.pkl"))
+model = joblib.load(os.path.join(BASE_DIR, "models/ai_detector/ai_detector.pkl"))
 
 class ai_detector:
     def __init__(self, text:str):
