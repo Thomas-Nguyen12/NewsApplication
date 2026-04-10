@@ -4,6 +4,15 @@ import numpy
 import re
 import shap
 import os
+import spacy
+nlp = spacy.load("en_core_web_sm")
+def lemmatize(text):
+    doc = nlp(text)
+    # Turn it into tokens, ignoring the punctuation
+    tokens = [token for token in doc if not token.is_punct]
+    # Convert those tokens into lemmas, EXCEPT the pronouns, we'll keep those.
+    lemmas = [token.lemma_ if token.pos_ != 'PRON' else token.orth_ for token in tokens]
+    return lemmas
 
 
 # Instead of this:
