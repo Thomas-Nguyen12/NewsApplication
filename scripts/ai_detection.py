@@ -73,9 +73,9 @@ class ai_detector:
         prediction = model.predict(self.text_tfidf)[0]
         if prediction == 0:
 
-            shap_plot = shap.plots.waterfall(shap_values[:,:,0][0])
+            shap_plot = shap.plots.waterfall(shap_values[:,:,0][0], max_display=20)
         else:
-            shap_plot = shap.plots.waterfall(shap_values[:,:,1][0])
+            shap_plot = shap.plots.waterfall(shap_values[:,:,1][0], max_display=20)
         return shap_plot
 
 
