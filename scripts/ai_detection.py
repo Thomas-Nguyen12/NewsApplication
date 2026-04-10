@@ -1,10 +1,9 @@
+import joblib
 import pandas as pd
-import joblib
-import numpy as np
-import shap
+import numpy
 import re
+import shap
 import os
-import joblib
 
 # Instead of this:
 # model = joblib.load("models/news_topic_classifier/news_topic_classifier.pkl")
