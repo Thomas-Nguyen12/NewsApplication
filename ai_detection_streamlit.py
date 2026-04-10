@@ -1,7 +1,3 @@
-import os
-os.environ["USE_TF"] = "0"
-os.environ["USE_TORCH"] = "1"
-
 import streamlit as st
 from streamlit_shap import st_shap
 
@@ -16,6 +12,10 @@ def load_ai_detector():
 def load_classifier():
     from scripts.classify_news import classifier
     return classifier
+
+import os
+os.environ["USE_TF"] = "0"
+os.environ["USE_TORCH"] = "1"
 
 
 # ── Page config ───────────────────────────────────────────────────────────────
