@@ -12,6 +12,9 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 model = joblib.load(os.path.join(BASE_DIR, "models/sentiment_anlayser/sentiment_analyser.pkl")
 vectoriser = joblib.load(os.path.join(BASE_DIR, "models/sentiment_analyser/sentiment_vectoriser.pkl")
+                         
+
+                         
 class classifier:
 
 
