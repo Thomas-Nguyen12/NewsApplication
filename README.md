@@ -57,21 +57,25 @@ Extends a time-series forecasting model for stock prices by incorporating financ
 
 ```
 .
-├── arvix_data          # data used for the models/ai_detector (objective 2)
-├── data                # scraped news data used for the multilabel news topic classifier (objective 1) 
+├── arvix_data    # Data for Objective 2
+├── data    # Data for Objective 1
 │   └── raw
 ├── documentation
+├── financial_data    # Data for Objective 3
 ├── images
 ├── models
-│   ├── ai_detector         
-│   ├── news_topic_classifier
-│   └── sentiment_analyser
-├── news_scraper        # scrapy web scraper used to collect data for news topic classifier (objective 1)
+│   ├── ai_detector      # model for Objective 1
+│   ├── news_topic_classifier    # model for Objective 2
+│   └── sentiment_analyser      # model for objective 3
+├── news_scraper      # scrapy webscraper used for Objective 1
 │   └── news_scraper
 │       └── spiders
 ├── notebooks
-├── scripts             # wrapper scripts used to implement the machine learning models within models/ 
-└── sentiment_analysis_data         # data collected from Malo et al. (2013) to analyse sentiment within financial news articles
+├── scripts    # Wrapper scripts that incorporate models/
+│  
+└── sentiment_analysis_data      # Sentiment data for Objective 3/
+
+
 ```
 
 ---
