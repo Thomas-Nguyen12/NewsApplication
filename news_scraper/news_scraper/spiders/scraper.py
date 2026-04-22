@@ -15,7 +15,7 @@ class ScraperSpider(scrapy.Spider):
 
     latest_month = datetime.datetime.now().month 
     latest_year = datetime.datetime.now().year 
-    years = [i for i in range(2004, latest_year + 1)]
+    years = [i for i in range(2025, latest_year + 1)]
     
     
     print (f"Years: {years}") 
