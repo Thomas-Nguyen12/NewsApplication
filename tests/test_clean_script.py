@@ -116,6 +116,12 @@ class TestTopicReplacements:
         result = apply_topic_cleaning(df)
         assert set(result["topic"]) == VALID_TOPICS
 
+    def test_number_of_unique_topics_is_10(self):
+        """After cleaning, there should be exactly 10 unique topics."""
+        df = pd.DataFrame({"topic": list(REPLACEMENTS.keys())})
+        result = apply_topic_cleaning(df)
+        assert result["topic"].nunique() == 10
+
     def test_unknown_topic_is_left_as_is(self):
         """An unrecognised topic should survive cleaning unchanged (lowercased only)."""
         df = pd.DataFrame({"topic": ["Some random topic"]})
