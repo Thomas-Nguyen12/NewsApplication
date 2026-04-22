@@ -137,14 +137,19 @@ df['topic'] = df['topic'].replace(replacements, regex=True)
 
 
 df['topic'] = df['topic'].str.lower()
+
 replacements2 = {
     "disaster and accidents": "disasters and accidents",
 
     "attacks and armed conflicts": "armed conflicts and attacks",
     "business and econony": "business and economics",
+    "law and crime": "law and crime and politics",
+    'disasters and incidents': "disasters and accidents",
+    'law and crime and politics and politics': "law and crime and politics",
 }
 df['topic'] = df['topic'].replace(replacements2, regex=True)
 
+df['topic'] = df['topic'].str.replace("law and crime and politics and politics", "law and crime and politics")
 
 
 print (f"The data spans from... {df.date.min()} to {df.date.max()}")
