@@ -44,7 +44,7 @@ print ("Running the scraper...")
 try:
 
     os.system(f"scrapy crawl scraper -o financial_data/news/news_{current_day}_{current_month}_{current_year}.csv")
-except as e:
+except Exception as e:
     print (f"There was an error: {e}")
 
 
