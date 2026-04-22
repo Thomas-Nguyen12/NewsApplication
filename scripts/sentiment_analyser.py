@@ -20,7 +20,7 @@ class analyser:
 
     def __init__(self, text:str):
 
-        self.text = re.sub('[^a-zA-Z.]', text).strip()
+        self.text = re.sub('[^a-zA-Z]', ' ', text).strip()
         self.text_tfidf=vectoriser.transform([text])
 
     
