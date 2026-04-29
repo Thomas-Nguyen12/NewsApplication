@@ -57,25 +57,26 @@ Extends a time-series forecasting model for stock prices by incorporating financ
 
 ```
 .
-├── arvix_data    # Data for Objective 2
+├── arvix_data      # Data for Objective 2
 ├── data    # Data for Objective 1
 │   └── raw
 ├── documentation
-├── financial_data    # Data for Objective 3
+├── financial_data     # Data for Objective 3
+│   └── news
 ├── images
 ├── models
-│   ├── ai_detector      # model for Objective 1
-│   ├── news_topic_classifier    # model for Objective 2
-│   └── sentiment_analyser      # model for objective 3
-├── news_scraper      # scrapy webscraper used for Objective 1
+│   ├── ai_detector       # model for Objective 1
+│   ├── news_topic_classifier   # model for Objective 2
+│   ├── sentiment_analyser   # model for objective 3
+│   └── time_series      # models that forecast stock prices for different companies
+├── news_scraper    # scrapy webscraper used for Objective 1
 │   └── news_scraper
-│       └── spiders
+│       └── spiders   
 ├── notebooks
 ├── scripts    # Wrapper scripts that incorporate models/
 │  
-└── sentiment_analysis_data      # Sentiment data for Objective 3/
-
-
+├── sentiment_analysis_data   # Sentiment data for Objective 3/
+└── tests
 ```
 
 ---
