@@ -48,8 +48,13 @@ Trains a binary classifier to distinguish human-written news articles from AI-ge
 
 Extends a time-series forecasting model for stock prices by incorporating financial sentiment scores as an auxiliary variable.
 
-- **Data source:** Financial phrasebank from *Good Debt or Bad Debt: Detecting Semantic Orientations in Economic Texts* (Malo et al., 2013)
+- **Sentiment analysis Data source:** Financial phrasebank from *Good Debt or Bad Debt: Detecting Semantic Orientations in Economic Texts* (Malo et al., 2013)
 - **Storage:** Data is stored in the `sentiment_analysis_data/` directory
+
+- **Historical stock data source:** Yahoo! Finance.
+
+So far, only Vinfast has been modelled as it was an easier stock to model and analyse. However, other companies will be analysed soon
+> I plan on using sentiment analysis to capture the sudden market volatility that historical prices may struggle with.
 
 ---
 
@@ -68,7 +73,8 @@ Extends a time-series forecasting model for stock prices by incorporating financ
 │   ├── ai_detector       # model for Objective 1
 │   ├── news_topic_classifier   # model for Objective 2
 │   ├── sentiment_analyser   # model for objective 3
-│   └── time_series      # models that forecast stock prices for different companies
+│   └── time_series    # models that forecast stock prices for different companies
+│       └── vinfast/       
 ├── news_scraper    # scrapy webscraper used for Objective 1
 │   └── news_scraper
 │       └── spiders   
