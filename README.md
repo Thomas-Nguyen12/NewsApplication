@@ -46,12 +46,13 @@ Trains a binary classifier to distinguish human-written news articles from AI-ge
 
 ### Objective 3 — Stock Price Forecasting with Sentiment Analysis
 
-Extends a time-series forecasting model for stock prices by incorporating financial sentiment scores as an auxiliary variable.
+Extends a time-series forecasting model for stock prices for various companies by incorporating financial sentiment scores as an auxiliary variable.
 
-- **Sentiment analysis Data source:** Financial phrasebank from *Good Debt or Bad Debt: Detecting Semantic Orientations in Economic Texts* (Malo et al., 2013)
-- **Storage:** Data is stored in the `sentiment_analysis_data/` directory
+- **Sentiment analysis Data source:** Financial phrasebank from *Good Debt or Bad Debt: Detecting Semantic Orientations in Economic Texts* (Malo et al., 2013). The subsequent model will be used upon news data extracted from ```newsapi.org``` focused upon various companies.
+- **Sentimetn Data Storage:** Sentiment Data is stored in the `sentiment_analysis_data/` directory
 
 - **Historical stock data source:** Yahoo! Finance.
+- **Historical Stock Data Storage:** ```financial_data/```
 
 So far, only Vinfast has been modelled as it was an easier stock to model and analyse. However, other companies will be analysed soon
 > I plan on using sentiment analysis to capture the sudden market volatility that historical prices may struggle with.
