@@ -56,14 +56,23 @@ class clean_isolation_forest:
 
 
         # doing some preemptive formatting
-        self.df.index = pd.to_datetime(df['date']) 
-        self.df.drop(['date'],axis=1,inplace=True)
+        if 'date' in self.df.columns:
+
+            self.df.index = pd.to_datetime(df['date']) 
+            self.df.drop(['date'],axis=1,inplace=True)
 
 
-        self.df['day'] = self.df.index.day
-        self.df['month'] = self.df.index.month 
-        self.df['year'] = self.df.index.year
+            self.df['day'] = self.df.index.day
+            self.df['month'] = self.df.index.month 
+            self.df['year'] = self.df.index.year
 
+        # checking if the date is in the index
+        elif self.df.index == pd.to_datetime(self.df.index): 
+            self.df.index = pd.to_datetime(self.df.index)
+            print ("The datetime is in the index... moving on...")
+        
+        else:
+            print ("Please check the formatting of the date column")
 
 
 
