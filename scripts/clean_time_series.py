@@ -156,8 +156,10 @@ class clean_iqr:
         self.df['month'] = self.df.index.month 
         self.df['year'] = self.df.index.year
 
-    
-    def fit(self) -> pd.DataFrame: 
+        # creating the self.column stats so that the code becomes cleaner 
+        self.column_stats = None
+
+    def fit(self): 
         # This just calculates the median, lower and upper
         # This should just be used for X_train
         print ("Calculating the upper, lower, median and iqr...")
@@ -172,9 +174,8 @@ class clean_iqr:
 
                 # I should return this as a dictionary so I can access the values
                 self.column_iqr_median_upper_lower.append((column, iqr, median, upper, lower))
-
-        return pd.DataFrame(self.column_iqr_median_upper_lower, columns=['column', 'iqr', 'median', 'upper', 'lower']) 
-
+        self.column_stats = pd.DataFrame(self.column_iqr_median_upper_lower, columns=['column', 'iqr', 'median', 'upper', 'lower']) 
+        # the column_stats are saved for use 
 
     def fit_transform(self) -> pd.DataFrame: 
         # This should be used for X_train
@@ -193,9 +194,18 @@ class clean_iqr:
 
             else:
                 print (f"`{column}` is a datetime. Ignoring this...")
+
+        print ("Deleting the unecessary columns...") 
+        # I will need to delete all of the columns that do not have _iqr_imputed 
+
+        columns_to_remove = [column for column in self.df.columns if 'iqr' in column or column == 'day' or column == 'month' or column == 'year']
+
+        self.df.drop(columns_to_remove,axis=1,inplace=True)
+
+
         return self.df
         
-    def transform(self, column_stats: pd.DataFrame, dataframe: pd.DataFrame) -> pd.DataFrame: 
+    def transform(self, dataframe: pd.DataFrame) -> pd.DataFrame: 
         # This should be used for X_test
         # the stats should be in self.columns_iqr_median_Upper_lower
         if 'date' in dataframe.columns:
@@ -205,7 +215,7 @@ class clean_iqr:
             dataframe['year'] = dataframe.index.year
             dataframe.drop(['date'],axis=1,inplace=True)
      
-        if column_stats is not None:
+        if self.column_stats is not None:
 
 
             for column in dataframe.columns: 
@@ -216,11 +226,11 @@ class clean_iqr:
 
                     # I need to extract the values for column_iqr_median_upper_lower
                     print ("Transforming... Dataframe") 
-                    median = column_stats[column_stats['column'] == column]['median'].values
+                    median = self.column_stats[self.column_stats['column'] == column]['median'].values
                     print (f"median: {median}")
-                    upper = column_stats[column_stats['column'] == column]['upper'].values
+                    upper = self.column_stats[self.column_stats['column'] == column]['upper'].values
                     print (f"upper: {upper}")
-                    lower = column_stats[column_stats['column'] == column]['lower'].values
+                    lower = self.column_stats[self.column_stats['column'] == column]['lower'].values
                     print (f"lower: {lower}")
                     
                     dataframe[f"{column}_iqr_imputed"] = [median if value > upper or value < lower else value for value in dataframe[column]]
@@ -229,8 +239,9 @@ class clean_iqr:
             return "Please fit the cleaner first on your X_train and then use this method to clean your X_test"
 
         # dropping the irrelevant columns
-      
+        columns_to_remove = [column for column in dataframe if 'iqr' in column or column == 'day' or column == 'month' or column == 'year']
 
+        dataframe.drop(columns_to_remove, axis=1,inplace=True)
 
         return dataframe
     
@@ -255,5 +266,11 @@ class clean_iqr:
         print ("Removing the first row")
 
         result = dataframe.iloc[1:]
+        columns_to_remove = [column for column in result if 'lagged' in column or column == 'day' or column == 'month' or column == 'year']
+
+        result.drop(columns_to_remove, axis=1,inplace=True)
+
+
+
         return result
     

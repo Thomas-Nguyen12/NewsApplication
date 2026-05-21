@@ -5,12 +5,18 @@ import seaborn as sns
 import scipy.stats as stats
 import sys
 import joblib
+import pandas_market_calendars as mcal
 from datetime import timedelta, date
+import os 
 
-open_clf  = joblib.load("../models/time_series/vinfast/vinfast_open_forecaster.pkl")
-high_clf  = joblib.load("../models/time_series/vinfast/vinfast_high_forecaster.pkl")
-low_clf   = joblib.load("../models/time_series/vinfast/vinfast_low_forecaster.pkl")
-close_clf = joblib.load("../models/time_series/vinfast/vinfast_adjusted_close_forecaster.pkl")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
+
+open_clf  = joblib.load(os.path.join(BASE_DIR, "models/time_series/vinfast/vinfast_open_forecaster.pkl"))
+high_clf  = joblib.load(os.path.join(BASE_DIR, "models/time_series/vinfast/vinfast_high_forecaster.pkl"))
+low_clf   = joblib.load(os.path.join(BASE_DIR, "models/time_series/vinfast/vinfast_low_forecaster.pkl"))
+close_clf = joblib.load(os.path.join(BASE_DIR, "models/time_series/vinfast/vinfast_adjusted_close_forecaster.pkl"))
+
+nasdaq = mcal.get_calendar("NASDAQ")
 
 
 class forecaster:
@@ -46,52 +52,86 @@ class forecaster:
         seed_close: float,
     ):
         self.input_date  = pd.Timestamp(input_date)
-        self.n_periods   = n_periods          # keep as int — used for loop count
-        self.end_date    = self.input_date + timedelta(days=n_periods * 2)  # rough upper bound
+        self.n_periods   = n_periods
+        self.end_date    = self.input_date + timedelta(days=n_periods * 2)
         self.seed_open   = seed_open
         self.seed_high   = seed_high
         self.seed_low    = seed_low
         self.seed_close  = seed_close
-        self._results: pd.DataFrame | None = None   # cached after first call
+        self._results: pd.DataFrame | None = None
+
+        # Pre-compute valid trading days from input_date up to a safe upper bound
+        schedule = nasdaq.schedule(
+            start_date=self.input_date,
+            end_date=self.input_date + timedelta(days=n_periods * 2 + 30),
+        )
+        self._trading_days = mcal.date_range(schedule, frequency="1D")
 
     # ------------------------------------------------------------------
     # Internal helpers
     # ------------------------------------------------------------------
+   
+    def _next_trading_day(self, current: pd.Timestamp) -> pd.Timestamp:
+        """Return the next NASDAQ trading day after current, skipping weekends and holidays."""
+        current_utc = current.normalize().tz_localize("UTC") + timedelta(days=1)
+        future = self._trading_days[self._trading_days >= current_utc]
+        if future.empty:
+            raise ValueError(
+                f"No trading days found after {current.date()}. "
+                "Extend the schedule end_date in __init__."
+            )
+        return future[0].normalize().tz_localize(None)
 
-    @staticmethod
-    def _next_trading_day(current: pd.Timestamp) -> pd.Timestamp:
-        """Advance by one calendar day, skipping weekends."""
-        nxt = current + timedelta(days=1)
-        while nxt.weekday() >= 5:   # 5 = Saturday, 6 = Sunday
-            nxt += timedelta(days=1)
-        return nxt
 
     @staticmethod
     def _open_features(day: int, month: int, year: int,
-                       lag_close: float, lag_high: float, lag_low: float) -> pd.DataFrame:
-        """Feature row for open_clf (no IQR suffix)."""
+                    lag_high: float, lag_low: float, lag_close: float) -> pd.DataFrame:
+        """Features for open_clf — excludes lagged_open_iqr_imputed."""
         return pd.DataFrame([{
-            "day":                  day,
-            "month":                month,
-            "year":                 year,
-            "lagged_adjusted_close": lag_close,
-            "lagged_high":          lag_high,
-            "lagged_low":           lag_low,
+            "day":                              day,
+            "month":                            month,
+            "year":                             year,
+            "lagged_high_iqr_imputed":          lag_high,
+            "lagged_low_iqr_imputed":           lag_low,
+            "lagged_adjusted_close_iqr_imputed": lag_close,
+        }])
+    @staticmethod
+    def _high_features(day: int, month: int, year: int,
+                       lag_open: float, lag_low: float, lag_close: float) -> pd.DataFrame:
+        """Features for high_clf — excludes lagged_high_iqr_imputed."""
+        return pd.DataFrame([{
+            "day":                              day,
+            "month":                            month,
+            "year":                             year,
+            "lagged_open_iqr_imputed":          lag_open,
+            "lagged_low_iqr_imputed":           lag_low,
+            "lagged_adjusted_close_iqr_imputed": lag_close,
         }])
 
     @staticmethod
-    def _other_features(day: int, month: int, year: int,
-                        lag_open: float, lag_high: float,
-                        lag_low: float, lag_close: float) -> pd.DataFrame:
-        """Feature row for high_clf / low_clf / close_clf (IQR-imputed names)."""
+    def _low_features(day: int, month: int, year: int,
+                      lag_open: float, lag_high: float, lag_close: float) -> pd.DataFrame:
+        """Features for low_clf — excludes lagged_low_iqr_imputed."""
         return pd.DataFrame([{
             "day":                              day,
             "month":                            month,
             "year":                             year,
             "lagged_open_iqr_imputed":          lag_open,
             "lagged_high_iqr_imputed":          lag_high,
-            "lagged_low_iqr_imputed":           lag_low,
             "lagged_adjusted_close_iqr_imputed": lag_close,
+        }])
+
+    @staticmethod
+    def _close_features(day: int, month: int, year: int,
+                        lag_open: float, lag_high: float, lag_low: float) -> pd.DataFrame:
+        """Features for close_clf — excludes lagged_adjusted_close_iqr_imputed."""
+        return pd.DataFrame([{
+            "day":                     day,
+            "month":                   month,
+            "year":                    year,
+            "lagged_open_iqr_imputed": lag_open,
+            "lagged_high_iqr_imputed": lag_high,
+            "lagged_low_iqr_imputed":  lag_low,
         }])
 
     # ------------------------------------------------------------------
@@ -108,7 +148,7 @@ class forecaster:
             Columns: date, predicted_open, predicted_high,
                       predicted_low, predicted_adjusted_close
         """
-        if self._results is not None:      # return cached result on repeat calls
+        if self._results is not None:
             return self._results
 
         rows = []
@@ -122,22 +162,23 @@ class forecaster:
         for _ in range(self.n_periods):
             day, month, year = current_date.day, current_date.month, current_date.year
 
-            # --- open (uses its own feature schema) ---
-            X_open  = self._open_features(day, month, year, lag_close, lag_high, lag_low)
-            pred_open = float(open_clf.predict(X_open)[0])
+            pred_open  = float(open_clf.predict(
+                self._open_features(day, month, year, lag_high, lag_low, lag_close))[0])
 
-            # --- high, low, close (share the IQR feature schema) ---
-            X_other = self._other_features(day, month, year,
-                                           pred_open, lag_high, lag_low, lag_close)
-            pred_high  = float(high_clf.predict(X_other)[0])
-            pred_low   = float(low_clf.predict(X_other)[0])
-            pred_close = float(close_clf.predict(X_other)[0])
+            pred_high  = float(high_clf.predict(
+                self._high_features(day, month, year, lag_open, lag_low, lag_close))[0])
+
+            pred_low   = float(low_clf.predict(
+                self._low_features(day, month, year, lag_open, lag_high, lag_close))[0])
+
+            pred_close = float(close_clf.predict(
+                self._close_features(day, month, year, lag_open, lag_high, lag_low))[0])
 
             rows.append({
-                "date":                    current_date.date(),
-                "predicted_open":          pred_open,
-                "predicted_high":          pred_high,
-                "predicted_low":           pred_low,
+                "date":                     current_date.date(),
+                "predicted_open":           pred_open,
+                "predicted_high":           pred_high,
+                "predicted_low":            pred_low,
                 "predicted_adjusted_close": pred_close,
             })
 
@@ -148,6 +189,11 @@ class forecaster:
             lag_close = pred_close
 
             current_date = self._next_trading_day(current_date)
+            
+            for _ in range(self.n_periods):
+                print(f"current_date: {current_date}, type: {type(current_date)}, tz: {current_date.tzinfo}")
+                day, month, year = current_date.day, current_date.month, current_date.year
+
 
         self._results = pd.DataFrame(rows)
         return self._results
@@ -177,9 +223,8 @@ class forecaster:
             mean   = series.mean()
             std    = series.std(ddof=1)
 
-            # 95 % t-interval (robust for small n)
-            t_crit         = stats.t.ppf(0.975, df=n - 1)
-            margin         = t_crit * std / np.sqrt(n)
+            t_crit             = stats.t.ppf(0.975, df=n - 1)
+            margin             = t_crit * std / np.sqrt(n)
             ci_lower, ci_upper = mean - margin, mean + margin
 
             summary_rows.append({
