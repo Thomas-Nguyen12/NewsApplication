@@ -135,6 +135,14 @@ class clean_isolation_forest:
         print ("Removing the first row")
 
         result = dataframe.iloc[1:]
+        print ("renaming the columns...")
+        
+        for column in result.columns:
+            
+            # renaming
+            if column != "day" and column != "month" and column != "year":
+
+                result.rename({f"{column}": f"lagged_{column}"},axis=1, inplace=True)
         return result
 
 
@@ -202,8 +210,8 @@ class clean_iqr:
         print ("Deleting the unecessary columns...") 
         # I will need to delete all of the columns that do not have _iqr_imputed 
 
-        columns_to_remove = [column for column in self.df.columns if 'iqr' in column or column == 'day' or column == 'month' or column == 'year']
-
+        columns_to_remove = [column for column in self.df.columns if 'iqr' not in column and column != 'day' and column != 'month' and column != 'year']
+        print (f"Columns to remove: {columns_to_remove}")
         self.df.drop(columns_to_remove,axis=1,inplace=True)
 
 
@@ -243,7 +251,7 @@ class clean_iqr:
             return "Please fit the cleaner first on your X_train and then use this method to clean your X_test"
 
         # dropping the irrelevant columns
-        columns_to_remove = [column for column in dataframe if 'iqr' in column or column == 'day' or column == 'month' or column == 'year']
+        columns_to_remove = [column for column in dataframe if 'iqr' not in column and column != 'day' and column != 'month' and column != 'year']
 
         dataframe.drop(columns_to_remove, axis=1,inplace=True)
 
@@ -279,12 +287,16 @@ class clean_iqr:
 
                 dataframe[f"lagged_{column}"] = lagged_values
         # removing the first row
+        print (f"dataframe: {dataframe}")
         print ("Removing the first row")
 
         result = dataframe.iloc[1:]
-        columns_to_remove = [column for column in result if 'lagged' in column or column == 'day' or column == 'month' or column == 'year']
+        columns_to_remove = [column for column in result if 'lagged' not in column and column != 'day' and column != 'month' and column != 'year']
 
         result.drop(columns_to_remove, axis=1,inplace=True)
+        
+        # renaming the columns 
+        #
 
 
 
