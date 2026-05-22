@@ -39,16 +39,17 @@ anomalies = df[df['is_anomaly']][['date', 'high', 'anomaly_score']]
 print(f"Found {len(anomalies)} anomalies out of {len(df)} records")
 print(anomalies)
 """
-
+print ("You have imported the clean_time_series.py module...")
 print ("This script is based on the idea that you wish to use lagging stock values to predict future stock values")
-print ("Make sure you have cleaned your data first") 
-print ("This script is for preprocessing for modelling...")
-print ("The date should be within the index")
+print ("Make sure you have cleaned your data first. This means that:")
+print ("    1. all columns have been converted to lowercase")
+print ("    2. all missing/erroenous values have been corrected") 
 # This is an unsupervised technique
 class clean_isolation_forest:
 
     def __init__(self, df: pd.DataFrame) -> pd.DataFrame: 
-
+        print ("-----------------------------")
+        print ("this is the clean_isolation_forest class. This uses the isolation forest unsupervised technique to identify anomalies...") 
         self.df = df
         self.df.columns = self.df.columns.str.lower()
 
@@ -140,6 +141,9 @@ class clean_isolation_forest:
 
 # This is a supervised technique
 class clean_iqr:
+
+    print ("-------------------------------")
+    print ("this is the clean_iqr module. This uses the interquartile range to identify anomalies...")
     def __init__(self, df: pd.DataFrame) -> pd.DataFrame:
         self.df = df
 
@@ -244,7 +248,19 @@ class clean_iqr:
         dataframe.drop(columns_to_remove, axis=1,inplace=True)
 
         return dataframe
-    
+   
+    # building a method to extract variables 
+    def get_column_stats(self):
+        if self.column_stats is not None: 
+
+            return self.column_stats 
+        else:
+            return "The column stats are empty. Please fit the class on an object"
+
+
+
+
+
     def build_lagging(self, dataframe: pd.DataFrame) -> pd.DataFrame:
 
         # building the lagging
