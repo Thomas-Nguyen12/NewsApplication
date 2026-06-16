@@ -62,8 +62,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Load data ─────────────────────────────────────────────────────────────────
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv")
+df = pd.read_csv("data/vinfast_data_cleaned.csv")
 df.drop(columns=[c for c in df.columns if "Unnamed" in c], inplace=True)
 df["date"] = pd.to_datetime(df["date"])
 df.sort_values("date", ascending=True, inplace=True)
