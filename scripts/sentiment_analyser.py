@@ -5,18 +5,12 @@ import re
 import shap
 import os
 
-
 from nltk.corpus import stopwords
 import spacy
-
 # Instead of this:
 # model = joblib.load("models/news_topic_classifier/news_topic_classifier.pkl")
-
+from preprocessing import lemmatize
 # Use this:
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-model = joblib.load(os.path.join(BASE_DIR, "models/sentiment_analyser/sentiment_analyser.pkl"))
-vectoriser = joblib.load(os.path.join(BASE_DIR, "models/sentiment_analyser/sentiment_vectoriser.pkl"))
-
 
 stop_words = list(set(stopwords.words('english')))
 nlp = spacy.load("en_core_web_sm")
@@ -28,15 +22,21 @@ def lemmatize(text):
     lemmas = [token.lemma_ if token.pos_ != 'PRON' else token.orth_ for token in tokens]
     return lemmas
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+model = joblib.load(os.path.join(BASE_DIR, "models/sentiment_analyser/sentiment_analyser.pkl"))
+vectoriser = joblib.load(os.path.join(BASE_DIR, "models/sentiment_analyser/sentiment_vectoriser.pkl"))
 
 
                          
 class analyser:
+    
 
 
     def __init__(self, text:str):
 
         self.text = re.sub('[^a-zA-Z]', ' ', text).strip()
+
+        # the vectoriser needs to access the lemmatizer
         self.text_tfidf=vectoriser.transform([text])
 
     
@@ -64,4 +64,5 @@ class analyser:
 
 if __name__ == '__main__': 
     print ("This is the main file") 
-
+    print (f"Base dir: {BASE_DIR}")
+    print (f"Lemmatizer: {lemmatize}")
