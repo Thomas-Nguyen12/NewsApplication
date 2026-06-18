@@ -6,15 +6,14 @@ import shap
 import os
 
 
-from nltk.corpus import stopwords
 import spacy
 # Instead of this:
 # model = joblib.load("models/news_topic_classifier/news_topic_classifier.pkl")
 
 # Use this:
 
-stop_words = list(set(stopwords.words('english')))
 nlp = spacy.load("en_core_web_sm")
+stop_words = list(nlp.Defaults.stop_words) 
 def lemmatize(text):
     doc = nlp(text)
     # Turn it into tokens, ignoring the punctuation

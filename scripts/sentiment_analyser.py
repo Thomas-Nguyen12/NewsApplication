@@ -10,17 +10,13 @@ import re
 import shap
 import os
 
-from nltk.corpus import stopwords
 import spacy
-# Instead of this:
-# model = joblib.load("models/news_topic_classifier/news_topic_classifier.pkl")
-# Use this:
-#
-#
-# This import works when inside the scripts/ folder. However, there is an error when running from the main streamlit file 
 
-stop_words = list(set(stopwords.words('english')))
+# Use this:
+
 nlp = spacy.load("en_core_web_sm")
+stop_words = list(nlp.Defaults.stop_words) 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 model = joblib.load(os.path.join(BASE_DIR, "models/sentiment_analyser/sentiment_analyser.pkl"))
 vectoriser = joblib.load(os.path.join(BASE_DIR, "models/sentiment_analyser/sentiment_vectoriser.pkl"))
