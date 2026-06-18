@@ -54,7 +54,9 @@ year = datetime.now().year
 #
 st.cache_data
 def load_news_eod(): 
-
+    # depending on the results from vinfast_data_collection.py, the eod_data will either 
+    # be an updated dataset or not 
+    #
     from scripts.vinfast_data_collection import eod_data, vinfast_news
     print ("Analysing the sentiment of the news...") 
     try: 
