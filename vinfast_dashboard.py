@@ -1,8 +1,20 @@
 # This will be a streamlit dashboard of vinfast predictions
 # 
+from pathlib import Path
+import sys
+
+BASE_DIR = Path(__file__).resolve().parent
+SCRIPTS_DIR = (BASE_DIR / "scripts").resolve()
+
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
 
 
 
+from preprocessing import lemmatize 
+import preprocessing 
+
+from sentiment_analyser import analyser
 """
 Vinfast Stock Performance Dashboard
 """
@@ -13,6 +25,57 @@ import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime
 import os
+news_api_key = st.secrets['news_api_key']
+eod_key = st.secrets['fin_historical_data']
+
+# checking the datee and time for refresh 
+
+
+
+#
+# I can now checkingall the sentiment analyser module using mod.analyser 
+def sentiment_analysis(text:str) -> int: 
+    text_to_analyse = analyser(text) 
+    prediction = text_to_analyse.predict()[0]
+    return prediction 
+
+
+
+
+
+
+# day, month and year 
+#
+day = datetime.now().day 
+month = datetime.now().month 
+year = datetime.now().year 
+
+# collecting historical stock data:wq
+#
+st.cache_data
+def load_news_eod(): 
+
+    from scripts.vinfast_data_collection import eod_data, vinfast_news
+    print ("Analysing the sentiment of the news...") 
+    try: 
+        # analysing the content column 
+        # This may be a little slow
+        vinfast_news['content_sentiment'] = vinfast_news['content'].apply(sentiment_analysis)
+        print (vinfast_news.head()) 
+    except Exception as news_e: 
+        print (f"There was an exception: {news_e}") 
+    finally: 
+        print ("Analysis complete!") 
+
+
+    return eod_data, vinfast_news  
+
+
+
+print ("Loading the historical data...") 
+
+
+eod_data, vinfast_news = load_news_eod() 
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -20,6 +83,13 @@ st.set_page_config(
     page_icon="📈",
     layout="wide",
 )
+
+# --------> Testing the display of api data 
+st.header("EOD vinfast data") 
+st.header("VINFAST news") 
+
+
+
 
 # ── Custom styling ────────────────────────────────────────────────────────────
 st.markdown("""
@@ -63,9 +133,20 @@ st.markdown("""
 
 # ── Load data ─────────────────────────────────────────────────────────────────
 df = pd.read_csv("data/vinfast_data_cleaned.csv")
-df.drop(columns=[c for c in df.columns if "Unnamed" in c], inplace=True)
+df.drop(['Unnamed: 0'], axis=1, inplace=True)
+
 df["date"] = pd.to_datetime(df["date"])
 df.sort_values("date", ascending=True, inplace=True)
+
+df = pd.concat([df, eod_data], axis=0)
+df['date'] = pd.to_datetime(df['date'])
+
+# dropping the duplicates 
+df = df.drop_duplicates(subset=['date']) 
+print ("------------------")
+print (df)
+# the new df dataframe will be up to date 
+
 
 # ── Header ────────────────────────────────────────────────────────────────────
 col_title, col_ticker = st.columns([4, 1])
