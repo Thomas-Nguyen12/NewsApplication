@@ -45,57 +45,18 @@ finally:
 
 # ---------------------- Loading historical stock data 
 #
-df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv") 
-df['date'] = pd.to_datetime(df['date']) 
+try:
 
-# checking the latest date on df 
-day = datetime.datetime.now().day 
-month = datetime.datetime.now().month 
-year = datetime.datetime.now().year 
-current_date = pd.to_datetime(f"{year}-{month}-{day}")
-update_date = pd.Timedelta(365, "D") + max(df['date']) 
+    eod_request = requests.get(f"https://eodhd.com/api/eod/VFS?api_token={eod_key}&fmt=json")
 
-# deriving the dates and formatting them
-from_date = max(df['date'])
-from_date = str(from_date).split(" ")[0]
-to_date = pd.to_datetime(f'{year}-{month}-{day}')
-to_date = str(to_date).split(" ")[0]
-# if the update_date is within one week of the current date, I will reload the dataset and append it to the dataframe, saving it 
-# from_date and to_date are optional parameters
-def collect_historical_data(request:str): 
+    print (f"historical vinfast status code: {eod_request.status_code}")
 
-    try:
-
-        eod_request = requests.get(request)
-
-        print (f"historical vinfast status code: {eod_request.status_code}")
-
-        eod_data = json_normalize(eod_request.json())
-        print (f"eod data preview: {eod_data.head()}")
-        eod_data['date'] = pd.to_datetime(eod_data['date']) 
-        print (min(eod_data['date'])) 
-        print (max(eod_data['date'])) 
-
-
-    except Exception as eod_e: 
-        print (f"There was an error: {eod_e}")
-    finally: 
-        print ("---------------")
-
-    return eod_data 
-
-if pd.to_datetime(f"{year}-{month}-{day}") <= (update_date + pd.Timedelta(7, "D")):
-    # updating the date 
-    eod_data = collect_historical_data(request=f"https://eodhd.com/api/eod/VFS?api_token={eod_key}&fmt=json")
-
-    # appending to the dataset 
-    eod_data = pd.concat([df, eod_data],axis=0)
+    eod_data = json_normalize(eod_request.json())
+    print (f"eod data preview: {eod_data.head()}")
     eod_data['date'] = pd.to_datetime(eod_data['date']) 
-    eod_data.drop_duplicates(inplace=True, subset=['date']) 
-    eod_data.to_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv") 
 
-else: 
-    # In this case, the new dataset does NOT need to be saved. As such, the main streamlit script will automatically append the new data 
-    # This should limit the collected data to only the relevant results
-    eod_data = collect_historical_data(request=f"https://eodhd.com/api/eod/VFS?api_token={eod_key}&fmt=json&from={from_date}&to={to_date}") 
+except Exception as eod_e: 
+    print (f"There was an error: {eod_e}")
+finally: 
+    print ("---------------") 
 

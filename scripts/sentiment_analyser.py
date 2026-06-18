@@ -11,7 +11,6 @@ import shap
 import os
 
 from nltk.corpus import stopwords
-
 import spacy
 # Instead of this:
 # model = joblib.load("models/news_topic_classifier/news_topic_classifier.pkl")
