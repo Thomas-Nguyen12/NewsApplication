@@ -8,6 +8,12 @@ A machine learning pipeline for news analysis, combining AI-generated text detec
 streamlit run ai_detection_streamlit.py
 ```
 
+**Live Demo:** [Vinfast Stock Analysis Dashboard](https://vinfast-stock-analysis.streamlit.app) 
+
+```bash
+streamlit run vinfast_dashboard.py
+```
+
 ---
 
 ## Overview
