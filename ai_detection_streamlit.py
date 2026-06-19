@@ -513,8 +513,8 @@ if run_topic and topic_text.strip():
         </div>
         """, unsafe_allow_html=True)
 
-        explain_topic = clf.explain()
-        explain_topic_shap_plot = st_shap(explain_topic)
+#        explain_topic = clf.explain()
+#        explain_topic_shap_plot = st_shap(explain_topic)
 
 elif run_topic and not topic_text.strip():
     st.warning("Please paste some article text before classifying.")
