@@ -63,7 +63,7 @@ class classifier:
     def explain(self): 
         feature_names=vectoriser.get_feature_names_out()
         input_df = pd.DataFrame(self.text_tfidf.toarray(), columns=feature_names)
-        explainer = shap.Explainer(self.model) 
+        explainer = shap.KernelExplainer(self.model.predict_proba, data=) 
         shap_values=explainer(input_df)
         prediction = self.model.predict(self.text_tfidf)[0]
 

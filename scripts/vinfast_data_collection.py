@@ -5,7 +5,7 @@ import os
 from pandas import json_normalize
 import requests 
 import streamlit as st 
-from scripts.preprocessing import lemmatize
+from preprocessing import lemmatize
 
 # loading the sentiment analysis script 
 # I need to make sure that the script loads the correct directory

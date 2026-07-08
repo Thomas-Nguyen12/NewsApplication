@@ -25,6 +25,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime
 import os
+import numpy as np 
 news_api_key = st.secrets['news_api_key']
 eod_key = st.secrets['fin_historical_data']
 
@@ -34,14 +35,28 @@ eod_key = st.secrets['fin_historical_data']
 
 #
 # I can now checkingall the sentiment analyser module using mod.analyser 
+@st.cache_data 
 def sentiment_analysis(text:str) -> int: 
     text_to_analyse = analyser(text) 
     prediction = text_to_analyse.predict()[0]
     return prediction 
 
 
+@st.cache_data
+def assign_sentiment_colours(value: int) -> str:
+    if value == 0:
+        return "🔴"
+    elif value == 1:
+        return "🟡"
+    else:
+        return "🟢"
 
-
+@st.cache_data
+def assign_sentiment_proba(text:str) -> str:
+    text_to_analyse = analyser(text)
+    prediction_proba = text_to_analyse.predict_proba()
+    print (prediction_proba)
+    return f"{round(np.multiply(np.max(prediction_proba), 100))}" 
 
 
 # day, month and year 
@@ -49,10 +64,9 @@ def sentiment_analysis(text:str) -> int:
 day = datetime.now().day 
 month = datetime.now().month 
 year = datetime.now().year 
-
 # collecting historical stock data:wq
 #
-st.cache_data
+@st.cache_data
 def load_news_eod(): 
     # depending on the results from vinfast_data_collection.py, the eod_data will either 
     # be an updated dataset or not 
@@ -62,7 +76,13 @@ def load_news_eod():
     try: 
         # analysing the content column 
         # This may be a little slow
+        print ("Analysing sentiment...")
         vinfast_news['content_sentiment'] = vinfast_news['content'].apply(sentiment_analysis)
+        print ("Assigning colours...")
+        vinfast_news['sentiment'] = vinfast_news['content_sentiment'].apply(assign_sentiment_colours)
+        print ("Calculating confidence scores...")
+        vinfast_news['confidence (%)'] = vinfast_news['content'].apply(assign_sentiment_proba)
+
         print (vinfast_news.head()) 
     except Exception as news_e: 
         print (f"There was an exception: {news_e}") 
@@ -284,7 +304,27 @@ vol_fig.update_layout(
 )
 st.plotly_chart(vol_fig, use_container_width=True)
 
+
+# Showing news reports 
+# I will only use the title and the sentiment 
+# Adding the sentiment may make the website slower
+
+# the sentiment_analysis has already been performed
+# the senitment will be represented as a number. (0,1,2)
+st.header("Recent News reports")
+vinfast_news_to_display = vinfast_news[['title', 'url', 'sentiment', 'confidence (%)']]
+vinfast_news_to_display.index = pd.to_datetime(vinfast_news['publishedAt'])
+vinfast_news_to_display = vinfast_news_to_display.sort_index(ascending=False) 
+# displaying the table in tabular format
+with st.expander("View News reports"): 
+
+    st.dataframe(vinfast_news_to_display)
+
+
+
+
 # ── Raw data table (collapsible) ──────────────────────────────────────────────
+st.header("Raw Stock Data")
 with st.expander("View raw data"):
     st.dataframe(
         dff.set_index("date").style.format({
