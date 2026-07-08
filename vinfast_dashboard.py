@@ -324,6 +324,9 @@ with st.expander("View News reports"):
 
 
 # ── Raw data table (collapsible) ──────────────────────────────────────────────
+
+dff.drop(['Unnamed: 0.1'],axis=1,inplace=True)
+
 st.header("Raw Stock Data")
 with st.expander("View raw data"):
     st.dataframe(
