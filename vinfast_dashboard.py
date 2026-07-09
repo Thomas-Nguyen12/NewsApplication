@@ -36,10 +36,10 @@ eod_key = st.secrets['fin_historical_data']
 with st.sidebar: 
     # include a button that can st.switch_page() to the news article page
     if st.button("Home"):
-        st.switch_page(f"{BASE_DIR}/vinfast_dashboard.py")
+        st.switch_page(f"vinfast_dashboard.py")
 
     if st.button("Recent News Articles"):
-        st.switch_page(f"{BASE_DIR}/pages/news_page.py")
+        st.switch_page(f"pages/news_page.py")
 
 # day, month and year 
 #
