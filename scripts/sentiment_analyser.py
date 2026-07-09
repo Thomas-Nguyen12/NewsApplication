@@ -29,10 +29,10 @@ class analyser:
 
     def __init__(self, text:str):
 
-        self.text = re.sub('[^a-zA-Z]', ' ', text).strip()
+        self.text = re.sub('[^a-zA-Z]', ' ', self.text).strip()
 
         # the vectoriser needs to access the lemmatizer
-        self.text_tfidf=vectoriser.transform([text])
+        self.text_tfidf=vectoriser.transform([self.text])
 
     
     def predict(self):

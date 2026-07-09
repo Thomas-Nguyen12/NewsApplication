@@ -32,32 +32,14 @@ eod_key = st.secrets['fin_historical_data']
 # checking the datee and time for refresh 
 
 
+# creating a sidebar to navigate between pages
+with st.sidebar: 
+    # include a button that can st.switch_page() to the news article page
+    if st.button("Home"):
+        st.switch_page(f"{BASE_DIR}/vinfast_dashboard.py")
 
-#
-# I can now checkingall the sentiment analyser module using mod.analyser 
-@st.cache_data 
-def sentiment_analysis(text:str) -> int: 
-    text_to_analyse = analyser(text) 
-    prediction = text_to_analyse.predict()[0]
-    return prediction 
-
-
-@st.cache_data
-def assign_sentiment_colours(value: int) -> str:
-    if value == 0:
-        return "🔴"
-    elif value == 1:
-        return "🟡"
-    else:
-        return "🟢"
-
-@st.cache_data
-def assign_sentiment_proba(text:str) -> str:
-    text_to_analyse = analyser(text)
-    prediction_proba = text_to_analyse.predict_proba()
-    print (prediction_proba)
-    return f"{round(np.multiply(np.max(prediction_proba), 100))}" 
-
+    if st.button("Recent News Articles"):
+        st.switch_page(f"{BASE_DIR}/pages/news_page.py")
 
 # day, month and year 
 #
@@ -71,33 +53,17 @@ def load_news_eod():
     # depending on the results from vinfast_data_collection.py, the eod_data will either 
     # be an updated dataset or not 
     #
-    from scripts.vinfast_data_collection import eod_data, vinfast_news
-    print ("Analysing the sentiment of the news...") 
-    try: 
-        # analysing the content column 
-        # This may be a little slow
-        print ("Analysing sentiment...")
-        vinfast_news['content_sentiment'] = vinfast_news['content'].apply(sentiment_analysis)
-        print ("Assigning colours...")
-        vinfast_news['sentiment'] = vinfast_news['content_sentiment'].apply(assign_sentiment_colours)
-        print ("Calculating confidence scores...")
-        vinfast_news['confidence (%)'] = vinfast_news['content'].apply(assign_sentiment_proba)
-
-        print (vinfast_news.head()) 
-    except Exception as news_e: 
-        print (f"There was an exception: {news_e}") 
-    finally: 
-        print ("Analysis complete!") 
+    from scripts.vinfast_data_collection import eod_data
 
 
-    return eod_data, vinfast_news  
+    return eod_data
 
 
 
 print ("Loading the historical data...") 
 
 
-eod_data, vinfast_news = load_news_eod() 
+eod_data = load_news_eod() 
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -108,7 +74,7 @@ st.set_page_config(
 
 # --------> Testing the display of api data 
 st.header("EOD vinfast data") 
-st.header("VINFAST news") 
+
 
 
 
@@ -303,23 +269,6 @@ vol_fig.update_layout(
     showlegend=False,
 )
 st.plotly_chart(vol_fig, use_container_width=True)
-
-
-# Showing news reports 
-# I will only use the title and the sentiment 
-# Adding the sentiment may make the website slower
-
-# the sentiment_analysis has already been performed
-# the senitment will be represented as a number. (0,1,2)
-st.header("Recent News reports")
-vinfast_news_to_display = vinfast_news[['title', 'url', 'sentiment', 'confidence (%)']]
-vinfast_news_to_display.index = pd.to_datetime(vinfast_news['publishedAt'])
-vinfast_news_to_display = vinfast_news_to_display.sort_index(ascending=False) 
-# displaying the table in tabular format
-with st.expander("View News reports"): 
-
-    st.dataframe(vinfast_news_to_display)
-
 
 
 
