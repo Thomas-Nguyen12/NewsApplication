@@ -28,7 +28,7 @@ from sentiment_analyser import analyser
 with st.sidebar:
     
     if st.button("Home"):
-        st.switch_page(f"../vinfast_dashboard.py")
+        st.switch_page(f"{BASE_DIR}/vinfast_dashboard.py")
     
     if st.button("Recent News Articles"):
         st.switch_page(f"news_page.py")
