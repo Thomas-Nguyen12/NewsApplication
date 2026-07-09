@@ -24,16 +24,8 @@ import preprocessing
 from sentiment_analyser import analyser
 
 
-# adding a sidebar
 with st.sidebar:
-    
-    if st.button("Home"):
-        st.switch_page(f"{BASE_DIR}/vinfast_dashboard.py")
-    
-    if st.button("Recent News Articles"):
-        st.switch_page(f"news_page.py")
-
-
+    st.header("Navigation Bar")
 # adding a title
 st.title("Recent News Articles") 
 
