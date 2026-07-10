@@ -60,7 +60,7 @@ print ("Loading the historical data...")
 
 
 eod_data = load_news_eod() 
-
+df = eod_data
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="VFS · Stock Dashboard",
@@ -116,21 +116,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Load data ─────────────────────────────────────────────────────────────────
-df = pd.read_csv("data/vinfast_data_cleaned.csv")
-df.drop(['Unnamed: 0'], axis=1, inplace=True)
 
-df["date"] = pd.to_datetime(df["date"])
-df.sort_values("date", ascending=True, inplace=True)
 
-df = pd.concat([df, eod_data], axis=0)
-df['date'] = pd.to_datetime(df['date'])
-
-# dropping the duplicates 
-df = df.drop_duplicates(subset=['date']) 
-print ("------------------")
-print (df)
-# the new df dataframe will be up to date 
-
+# ────────────────────────────────────────────────────────────────────
 
 # ── Header ────────────────────────────────────────────────────────────────────
 col_title, col_ticker = st.columns([4, 1])
@@ -270,7 +258,6 @@ st.plotly_chart(vol_fig, use_container_width=True)
 
 # ── Raw data table (collapsible) ──────────────────────────────────────────────
 
-dff.drop(['Unnamed: 0.1'],axis=1,inplace=True)
 
 st.header("Raw Stock Data")
 with st.expander("View raw data"):

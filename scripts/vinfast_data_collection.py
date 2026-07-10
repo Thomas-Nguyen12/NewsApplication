@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # loading API keys
 
-
+df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv")
 
 eod_key = st.secrets["fin_historical_data"]
 news_api_key = st.secrets['news_api_key']
@@ -52,6 +52,23 @@ try:
     eod_data = json_normalize(eod_request.json())
     print (f"eod data preview: {eod_data.head()}")
     eod_data['date'] = pd.to_datetime(eod_data['date']) 
+    print ("checking if the historical eod needs updating...")
+    # ------------------- UPDATING THE DATASET IF NEEDED
+    if (max(df['date']) + pd.Timedelta(350, unit="D")) > max(eod_data['date']):
+        print ("Updating the saved dataset using the eod data") 
+        # update df and save it
+        df = pd.concat([df, eod_data],axis=0) 
+        df['date'] = pd.to_datetime(df['date']) 
+        df.to_csv("data/vinfast_data_cleaned.csv", index=False) 
+        
+    else:
+        print ("No need to update the eod data")
+        eod_data = pd.concat([df, eod_data], axis=0)
+        eod_data['date'] = pd.to_datetime(eod_data['date'])
+
+        # dropping the duplicates 
+        eod_data = eod_data.drop_duplicates(subset=['date']) 
+
 
 except Exception as eod_e: 
     print (f"There was an error: {eod_e}")

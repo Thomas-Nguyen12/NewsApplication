@@ -35,8 +35,25 @@ with st.sidebar:
 # ------------------- creating the set of predictions 
 
 from vinfast_multiple_predictors import forecaster
-df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv")
-df['date'] = pd.to_datetime(df['date']) 
+
+
+
+# Collecting live data 
+@st.cache_data
+def load_news_eod(): 
+    # depending on the results from vinfast_data_collection.py, the eod_data will either 
+    # be an updated dataset or not 
+    #
+    from scripts.vinfast_data_collection import eod_data
+
+
+    return eod_data
+eod_data = load_news_eod() 
+df = eod_data
+# joining the data 
+
+
+
 max_date = max(df['date']) 
 min_date = min(df['date']) 
 
