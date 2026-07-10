@@ -82,14 +82,15 @@ So far, only Vinfast has been modelled as it was an easier stock to model and an
 │   ├── sentiment_analyser   # model for objective 3
 │   └── time_series    # models that forecast stock prices for different companies
 │       └── vinfast/
-│           └── median_lower_upper/    # median values + upper + lower boundaries (1.5 * IQR) statistics for each column of stock data  │   
+│           └── median_lower_upper/    # median values + upper + lower boundaries (1.5 * IQR) statistics for each column of stock data  
 ├── news_scraper    # scrapy webscraper used for Objective 1
 │   └── news_scraper
 │       └── spiders   
 ├── notebooks
 ├── scripts    # Wrapper scripts that incorporate models/
-│  
-├── sentiment_analysis_data   # Sentiment data for Objective 3/
+│
+├──pages        # Additional pages for the vinfast streamlit dashboard 
+├── sentiment_analysis_data   # Sentiment data for Objective 3
 └── tests
 ```
 
