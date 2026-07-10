@@ -13,6 +13,7 @@ import spacy
 import streamlit as st
 
 from pathlib import Path 
+import plotly.express as px
 import sys 
 BASE_DIR = Path(__file__).resolve().parent
 SCRIPTS_DIR = (BASE_DIR / "scripts").resolve()
@@ -135,12 +136,35 @@ st.markdown("""
 vinfast_news = load_news() 
 
 
+# creating a plot to show the frequency of positive, negative, and bad news 
+# I will need to group by the values 
+vinfast_news['publishedAt'] = pd.to_datetime(vinfast_news['publishedAt'])
+grouped_news_sentiment = vinfast_news 
+grouped_news_sentiment['publishedAt'] = vinfast_news['publishedAt'].dt.date
+
+
+grouped_news_sentiment = pd.DataFrame(grouped_news_sentiment.groupby(['publishedAt', 'sentiment'])['sentiment'].count())
+grouped_news_sentiment = grouped_news_sentiment.rename({"sentiment": "sentiment_count"},axis=1)
+
+grouped_news_sentiment = grouped_news_sentiment.reset_index()
+
+
+
+
+# I need to manually set the colours
+fig = px.bar(grouped_news_sentiment, x='publishedAt', y='sentiment_count', color='sentiment', barmode='group',
+    color_discrete_sequence=['orange', 'green', 'red'], title="Recent News Sentiment Frequency")
+st.plotly_chart(fig)
+
 
 vinfast_news_to_display = vinfast_news[['title', 'url', 'sentiment', 'confidence (%)']]
 
 vinfast_news_to_display.index = pd.to_datetime(vinfast_news['publishedAt'])
 vinfast_news_to_display = vinfast_news_to_display.sort_index(ascending=False) 
 # displaying the table in tabular format
+
+
+
 
 
 st.dataframe(vinfast_news_to_display) 
