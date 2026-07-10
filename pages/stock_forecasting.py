@@ -17,6 +17,7 @@ nasdaq = mcal.get_calendar('NASDAQ')
 print (mcal.get_calendar_names())
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+print (f"BASE DIR: {BASE_DIR}")
 SCRIPTS_DIR = f"{BASE_DIR}/scripts"
 
 if str(SCRIPTS_DIR) not in sys.path:
