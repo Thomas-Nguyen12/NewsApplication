@@ -24,8 +24,7 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 st.title("Vinfast Stock Forecasting")
-st.subheader("Please note that this section is not complete. This section needs to continuously update itself with live data to build more accurate predictions")
-
+st.subheader("Please note: This section is still being refined...")
 # I can include a streamlit slider 
 with st.sidebar: 
     st.header("Navigation Bar")
@@ -90,7 +89,7 @@ date_range = st.slider(
     min_value=(minimum_market_date),
     max_value=(maximum_market_date),
     value=(starting_date),
-    format="MM DD, YYYY"
+    format="MMM DD, YYYY"
 
 
 )
