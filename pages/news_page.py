@@ -152,8 +152,10 @@ grouped_news_sentiment = grouped_news_sentiment.reset_index()
 
 
 # I need to manually set the colours
-fig = px.bar(grouped_news_sentiment, x='publishedAt', y='sentiment_count', color='sentiment', barmode='group',
-    color_discrete_sequence=['orange', 'red', 'green'], title="Recent News Sentiment Frequency",
+fig = px.bar(grouped_news_sentiment, x='publishedAt', y='sentiment_count', color='sentiment',color_discrete_map={"🟢": "green",
+    "🟡": "orange", 
+    "🔴": "red"}, 
+    barmode='group', title="Recent News Sentiment Frequency",
     labels={'sentiment_count': 'Number of News Articles'})
 st.plotly_chart(fig)
 
