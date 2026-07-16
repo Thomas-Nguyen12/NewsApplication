@@ -63,18 +63,20 @@ def assign_sentiment_proba(text:str) -> str:
 def load_news(): 
     from scripts.vinfast_data_collection import vinfast_news 
     print ("Analysing the sentiment of the news...") 
+    vinfast_news['title_description_content'] = vinfast_news['title'] + vinfast_news['description'] + vinfast_news['content']
     try: 
         # analysing the content column 
     
         print ("Analysing sentiment...")
+        
 
         # There is no attribute (text)
-        vinfast_news['content_sentiment'] = vinfast_news['content'].apply(sentiment_analysis)
+        vinfast_news['content_sentiment'] = vinfast_news['title_description_content'].apply(sentiment_analysis)
         print ("Assigning colours...")
         vinfast_news['sentiment'] = vinfast_news['content_sentiment'].apply(assign_sentiment_colours)
         # There seems to be an issue here
 
-        vinfast_news['confidence (%)'] = vinfast_news['content'].apply(assign_sentiment_proba)
+        vinfast_news['confidence (%)'] = vinfast_news['title_description_content'].apply(assign_sentiment_proba)
 
         print (vinfast_news.head()) 
     except Exception as news_e: 

@@ -30,6 +30,8 @@ class analyser:
     def __init__(self, text:str):
 
         self.text = re.sub('[^a-zA-Z]', ' ', text).strip()
+        self.text = re.sub(r'\[\+\d+ chars\]', '', self.text).strip()
+        print ("hello")
 
         # the vectoriser needs to access the lemmatizer
         self.text_tfidf=vectoriser.transform([text])
