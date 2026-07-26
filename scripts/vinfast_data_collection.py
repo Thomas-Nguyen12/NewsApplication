@@ -60,7 +60,7 @@ try:
         # update df and save it
         df = pd.concat([df, eod_data],axis=0) 
         df['date'] = pd.to_datetime(df['date']) 
-        df.to_csv("data/vinfast_data_cleaned.csv", index=False) 
+        df.to_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv", index=False) 
         
     else:
         print ("No need to update the eod data")
