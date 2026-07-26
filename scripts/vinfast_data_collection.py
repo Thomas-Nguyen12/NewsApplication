@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # loading API keys
 
-df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv")
+df = pd.read_csv(f"data/vinfast_data_cleaned.csv")
 
 eod_key = st.secrets["fin_historical_data"]
 news_api_key = st.secrets['news_api_key']
@@ -60,7 +60,8 @@ try:
         # update df and save it
         df = pd.concat([df, eod_data],axis=0) 
         df['date'] = pd.to_datetime(df['date']) 
-        df.to_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv", index=False) 
+        df = df.drop_duplicates(subset=['date'])
+        df.to_csv(f"data/vinfast_data_cleaned.csv", index=False) 
         
     else:
         print ("No need to update the eod data")
