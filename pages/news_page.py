@@ -63,7 +63,9 @@ def assign_sentiment_proba(text:str) -> str:
 def load_news(): 
     from scripts.vinfast_data_collection import vinfast_news 
     print ("Analysing the sentiment of the news...") 
+    print (vinfast_news.info())
     vinfast_news['title_description_content'] = vinfast_news['title'] + vinfast_news['description'] + vinfast_news['content']
+    vinfast_news['title_description_content'] = vinfast_news['title_description_content'].astype(str)
     try: 
         # analysing the content column 
     
@@ -71,13 +73,17 @@ def load_news():
         
 
         # There is no attribute (text)
-        vinfast_news['content_sentiment'] = vinfast_news['title_description_content'].apply(sentiment_analysis)
+        #vinfast_news['content_sentiment'] = vinfast_news['title_description_content'].apply(sentiment_analysis)
+        # using list comprehension instead of apply
+        vinfast_news['content_sentiment'] = [sentiment_analysis(value) for value in vinfast_news['title_description_content']]
         print ("Assigning colours...")
-        vinfast_news['sentiment'] = vinfast_news['content_sentiment'].apply(assign_sentiment_colours)
+        #vinfast_news['assessment'] = vinfast_news['content_sentiment'].apply(assign_sentiment_colours)
+        vinfast_news['sentiment'] = [assign_sentiment_colours(value) for value in vinfast_news['content_sentiment']]
+
         # There seems to be an issue here
 
-        vinfast_news['confidence (%)'] = vinfast_news['title_description_content'].apply(assign_sentiment_proba)
-
+        #vinfast_news['confidence (%)'] = vinfast_news['title_description_content'].apply(assign_sentiment_proba)
+        vinfast_news['confidence (%)'] = [assign_sentiment_proba(value) for value in vinfast_news['title_description_content']]
         print (vinfast_news.head()) 
     except Exception as news_e: 
         print (f"There was an exception: {news_e}") 
@@ -136,11 +142,18 @@ st.markdown("""
 
 # Loading the news reports
 vinfast_news = load_news() 
-
+vinfast_news.columns = vinfast_news.columns.str.strip()
+print (f"Column types: {vinfast_news.info()}")
 
 # creating a plot to show the frequency of positive, negative, and bad news 
 # I will need to group by the values 
+print (vinfast_news)
+print ("VINFAST NEWS COLUMNS")
+print (vinfast_news.columns)
 vinfast_news['publishedAt'] = pd.to_datetime(vinfast_news['publishedAt'])
+print ("--------------------------------- VINFAST NEWS")
+
+print (vinfast_news)
 grouped_news_sentiment = vinfast_news 
 grouped_news_sentiment['publishedAt'] = vinfast_news['publishedAt'].dt.date
 

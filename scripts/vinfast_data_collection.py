@@ -52,6 +52,7 @@ try:
     eod_data = json_normalize(eod_request.json())
     print (f"eod data preview: {eod_data.head()}")
     eod_data['date'] = pd.to_datetime(eod_data['date']) 
+    df['date'] = pd.to_datetime(df['date'])
     print ("checking if the historical eod needs updating...")
     # ------------------- UPDATING THE DATASET IF NEEDED
     if (max(df['date']) + pd.Timedelta(350, unit="D")) > max(eod_data['date']):
