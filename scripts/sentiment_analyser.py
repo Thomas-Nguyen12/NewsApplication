@@ -22,9 +22,9 @@ model = joblib.load(os.path.join(BASE_DIR, "models/sentiment_analyser/sentiment_
 vectoriser = joblib.load(os.path.join(BASE_DIR, "models/sentiment_analyser/sentiment_vectoriser.pkl"))
 
 
-                         
+
 class analyser:
-    
+
 
 
     def __init__(self, text:str):
@@ -46,7 +46,7 @@ class analyser:
         return prediction_proba
 
     def explain(self):
-       
+
        feature_names = vectoriser.get_feature_names_out()
        input_df=pd.DataFrame(self.text_tfidf.toarray(), columns=feature_names)
        explainer = shap.Explainer(model)

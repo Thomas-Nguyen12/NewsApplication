@@ -269,3 +269,25 @@ with st.expander("View raw data"):
         }),
         use_container_width=True,
     )
+
+
+# this section will be for bugs. 
+# I need to find a way to notify me 
+# A log file or email? 
+st.header("Feedback")
+with st.container():
+
+
+    text_area = st.text_area("Please write down any feedback here.") 
+
+    text_area_button = st.button("Click this to save your feedback") 
+
+    if text_area_button: 
+
+        with open(f"{BASE_DIR}/logs/feedback_log.txt", "a") as f:
+            f.write(f"--------------------------------------------------- {datetime.now()}\n") 
+            f.write(text_area)
+            f.write("\n\n\n\n")
+            f.close()
+
+
