@@ -280,9 +280,9 @@ with st.container():
 
     st.write("If you have any feedback, you can find my contact details below:\n") 
     
-    st.write("thomas.nguyen3612@gmail.com") 
-    st.write("https://thomas-nguyen12.github.io")
-    st.write("https://github.com/thomas-nguyen12")
+    st.info("thomas.nguyen3612@gmail.com", icon="ℹ️") 
+    st.info("https://thomas-nguyen12.github.io", icon="ℹ️")
+    st.info("https://github.com/thomas-nguyen12", icon="ℹ️")
     
 
 
