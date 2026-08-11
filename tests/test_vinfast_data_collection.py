@@ -4,9 +4,6 @@
 import sys 
 import pandas as pd 
 import numpy as np 
-import matplotlib.pyplot as plt 
-import seaborn as sns 
-import scipy.stats as stats 
 import pytest
 import os 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
