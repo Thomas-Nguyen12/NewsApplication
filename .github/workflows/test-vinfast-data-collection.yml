@@ -27,14 +27,17 @@ jobs:
   # name of the job 
   vinfast-data-collection: 
     runs-on: ubuntu-latest
-    env:
-      eod_key: ${{ secrets.fin_historical_data }}
-      news_api_key: ${{ secrets.news_api_key }}
-    run: |
-      mkdir -p .streamlit 
-      echo "eod_key = \"$eod_key\"" > .streamlit/secrets.toml
-      echo "news_api_key = \"$news_api_key\"" > .streamlit/secrets.toml
-    steps: 
+
+    steps:
+      - name: Create streamlit secrets file
+        env:
+          eod_key: ${{ secrets.fin_historical_data }}
+          news_api_key: ${{ secrets.news_api_key }}
+        run: |
+          mkdir -p .streamlit 
+          echo "eod_key = \"$eod_key\"" > .streamlit/secrets.toml
+          echo "news_api_key = \"$news_api_key\"" > .streamlit/secrets.toml
+
       - name: Check out repository 
         uses: actions/checkout@v4
       - name: Set up Python 
