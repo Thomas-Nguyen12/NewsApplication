@@ -35,8 +35,8 @@ jobs:
           news_api_key: ${{ secrets.news_api_key }}
         run: |
           mkdir -p .streamlit 
-          echo "eod_key = \"$eod_key\"" > .streamlit/secrets.toml
-          echo "news_api_key = \"$news_api_key\"" > .streamlit/secrets.toml
+          echo "eod_key = \"$eod_key\"" >> .streamlit/secrets.toml
+          echo "news_api_key = \"$news_api_key\"" >> .streamlit/secrets.toml
 
       - name: Check out repository 
         uses: actions/checkout@v4
