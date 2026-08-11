@@ -34,8 +34,8 @@ jobs:
 
       - name: Create streamlit secrets file
         env:
-          eod_key: ${{ secrets.fin_historical_data }}
-          news_api_key: ${{ secrets.news_api_key }}
+          eod_key: ${{ secrets.FIN_HISTORICAL_DATA }}
+          news_api_key: ${{ secrets.NEWS_API_KEY }}
         run: |
           mkdir -p .streamlit 
           echo "eod_key = \"$eod_key\"" >> .streamlit/secrets.toml
