@@ -5,7 +5,8 @@ import sys
 import pandas as pd 
 import numpy as np 
 import pytest
-import os 
+import os
+import streamlit as st
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # adding the scripts folder
