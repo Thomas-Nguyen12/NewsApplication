@@ -44,6 +44,10 @@ jobs:
           pip install pytest
 
 # running in case of failure
+      - name: Test Vinfast Data Collection 
+        run: |
+          pytest tests/test_vinfast_data_collection -v 
+
 
       - name: Report failure summary
         if: failure()
