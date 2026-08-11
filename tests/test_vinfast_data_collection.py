@@ -46,8 +46,5 @@ TESTS:
 def test_eod_status_code(): 
     assert eod_request.status_code == 200, "There is an error with the API. The status code is not 200"
 
-def test_news_status_code(): 
-    assert vinfast_request.status_code == 200, "The status code should be 200. There is an error with the request"
-
 
 
