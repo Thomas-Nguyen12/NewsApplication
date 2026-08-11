@@ -4,17 +4,18 @@
 import sys 
 import pandas as pd 
 import numpy as np 
-import pytest
+import pytest 
+import streamlit as st 
 import os
-import streamlit as st
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 # adding the scripts folder
-#
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 sys.path.append(f"{BASE_DIR}/scripts/") 
 # testing that the script import works 
-
-from vinfast_data_collection import vinfast_news, eod_data, vinfast_request 
+# make sure the module is found
+from vinfast_data_collection import vinfast_request, eod_request 
 
 
 """
@@ -42,14 +43,9 @@ TESTS:
 
 
 #  news collection tests 
+def test_eod_status_code(): 
+    assert eod_request.status_code == 200, "There is an error with the API. The status code is not 200"
 
-
-def test_news_dataframe(): 
-    columns = ['author', 'title', 'description', 'url', 'urlToImage', 'publishedAt',
-               'content', 'source.id', 'source.name'],
-    
-    for column in columns: 
-        assert column in columns, "There is an improperly formatted column within the vinfast news"
 def test_news_status_code(): 
     assert vinfast_request.status_code == 200, "The status code should be 200. There is an error with the request"
 
