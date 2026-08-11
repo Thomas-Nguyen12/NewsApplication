@@ -7,11 +7,13 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 import scipy.stats as stats 
-import pytest 
+import pytest
+import os 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # adding the scripts folder
 #
-sys.path.append("../scripts/") 
+sys.path.append(f"{BASE_DIR}/scripts/") 
 # testing that the script import works 
 
 from vinfast_data_collection import vinfast_news, eod_data, vinfast_request 
