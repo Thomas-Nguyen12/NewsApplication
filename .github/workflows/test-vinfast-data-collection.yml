@@ -46,7 +46,7 @@ jobs:
 # running in case of failure
       - name: Test Vinfast Data Collection 
         run: |
-          pytest tests/test_vinfast_data_collection -v 
+          pytest tests/test_vinfast_data_collection.py -v 
 
 
       - name: Report failure summary
