@@ -47,7 +47,7 @@ jobs:
 # running in case of failure
 
       - name: Report failure summary
-         if: failure()
+        if: failure()
         run: |
           echo "::error:: vinfast data collection tests failed. \
               This usually means that there was an error with the api or \
