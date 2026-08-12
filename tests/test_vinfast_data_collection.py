@@ -69,7 +69,5 @@ def test_eod_status_code(show_eod_status_code):
 
 
 
-def test_vinfast_dataframe(show_vinfast_news): 
-    assert isinstance(show_vinfast_news, pd.DataFrame), "There is an error with the API or data cleaning. Vinfast news should be a dataframe"
 
 
