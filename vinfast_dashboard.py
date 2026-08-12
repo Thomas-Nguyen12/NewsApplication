@@ -49,10 +49,10 @@ def load_news_eod():
     # depending on the results from vinfast_data_collection.py, the eod_data will either 
     # be an updated dataset or not 
     #
-    from scripts.vinfast_data_collection import eod_data
+    from scripts.vinfast_data_collection import load_eod_data
 
 
-    return eod_data
+    return load_eod_data()
 
 
 

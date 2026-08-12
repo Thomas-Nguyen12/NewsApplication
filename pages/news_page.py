@@ -63,7 +63,8 @@ def assign_sentiment_proba(text:str) -> str:
 
 @st.cache_data
 def load_news(): 
-    from scripts.vinfast_data_collection import vinfast_news 
+    from scripts.vinfast_data_collection import load_vinfast_news
+    vinfast_news = load_vinfast_news() 
     print ("Analysing the sentiment of the news...") 
     print (vinfast_news.info())
     vinfast_news['title_description_content'] = vinfast_news['title'] + vinfast_news['description'] + vinfast_news['content']
