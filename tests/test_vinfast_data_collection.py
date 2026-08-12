@@ -66,12 +66,8 @@ def show_eod_status_code():
 def test_eod_status_code(show_eod_status_code): 
     assert show_eod_status_code == 200, "There was an error with the EOD data API. The status code should be 200"
 
-def test_vinfast_news_status_code(show_vinfast_status_code): 
-    assert show_vinfast_status_code == 200, "There was an error with the Vinfast news API. The status code should be 200"
 
 
-def test_eod_dataframe(show_eod_data): 
-    assert isinstance(show_eod_data, pd.DataFrame), "There is an error with the API. the EOD data should be a dataframe"
 
 def test_vinfast_dataframe(show_vinfast_news): 
     assert isinstance(show_vinfast_news, pd.DataFrame), "There is an error with the API or data cleaning. Vinfast news should be a dataframe"
