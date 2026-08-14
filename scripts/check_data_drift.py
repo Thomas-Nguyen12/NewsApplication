@@ -150,7 +150,7 @@ def main() -> None:
     eod_data = fetch_eod_data("VFS")
 
     print("Loading the original saved dataset...")
-    df = pd.read_csv("data/vinfast_data_cleaned.csv")
+    df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv")
     print ("================ DEBUG COLUMNS") 
     print (df.columns)
     print ("================= END DEBUG")
