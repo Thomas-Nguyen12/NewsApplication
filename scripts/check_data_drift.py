@@ -6,6 +6,8 @@ import requests
 import streamlit as st
 import os
 from pandas import json_normalize
+from datetime import datetime 
+localtime = f"{datetime.now().day}-{datetime.now().month}-{datetime.now().year}"
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -162,6 +164,26 @@ def main() -> None:
     if not significant.empty:
         print("Significant drift detected in:", significant["feature"].tolist())
         # raise SystemExit(1)  # uncomment to fail a CI/CD job on drift
+    # How Do i send an email to myself? 
+
+        with open(f"{BASE_DIR}/logs/vinfast_data_drift_logs.txt", 'a') as f:
+            f.write("----------------------------------\n")
+
+            f.write(f"Date: {localtime}")
+            f.write(f"Data Drift: DETECTED")
+            f.write(f"{significant['feature'].tolist()}")
+            f.write("\n\n\n")
+            f.close() 
+        
+    
+    else: 
+        with open(f"{BASE_DIR}/logs/vinfast_data_drift_logs.txt", 'a') as f:
+            f.write("----------------------------------\n")
+
+            f.write(f"Date: {localtime}")
+            f.write(f"Data Drift: NOT DETECTED")
+            f.write("\n\n\n")
+            f.close()         
 
 
 if __name__ == "__main__":
