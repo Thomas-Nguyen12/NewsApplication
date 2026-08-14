@@ -2,7 +2,7 @@
 #
 #
 
-name: test-vinfast-data-collection
+name: Vinfast-Unit-Tests
 
 on: 
 
@@ -25,7 +25,7 @@ on:
 
 jobs: 
   # name of the job 
-  vinfast-data-collection: 
+  vinfast-stock-code-testing: 
     runs-on: ubuntu-latest
 
     steps:
@@ -61,11 +61,31 @@ jobs:
         run: |
           pytest tests/test_vinfast_data_collection.py -v 
 
-
-      - name: Report failure summary
+      - name: Report Data Collection failure summary
         if: failure()
         run: |
           echo "::error:: vinfast data collection tests failed. \
               This usually means that there was an error with the api or \
               how the data was subsequently formatted" 
 
+      - name: Test Trading Calendar 
+        run: |
+          pytest -v tests/test_trading_calendar.py -v
+
+      - name: Report Trading Calendar failure summary
+        if: failure()
+        run: |
+          echo "::error::Trading calendar edge case tests failed. \
+          This usually means a holiday/early-close date or timezone \
+          assumption in the forecasting pipeline is out of date."
+
+      - name: Test check Data Drift 
+        run: |
+          pytest -v tests/test_check_data_drift.py
+
+
+      - name: Report Data Drift failure summary
+        if: failure()
+        run: |
+          echo "::error:: There was an error in the scripts that detect Data Drift \
+          Please check your data drift scripts."
