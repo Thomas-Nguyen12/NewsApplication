@@ -151,7 +151,9 @@ def main() -> None:
 
     print("Loading the original saved dataset...")
     df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv")
-
+    print ("================ DEBUG COLUMNS") 
+    print (df.columns)
+    print ("================= END DEBUG")
     print("Investigating Data Drift...")
     report = psi_report(
         df,
