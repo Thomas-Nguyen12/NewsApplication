@@ -217,8 +217,7 @@ def psi_report(
 # new dataframe: eod_data
 # I have to specify the column name
 
-psi = calculate_psi(reference=df['adjusted_close'], current=eod_data['adjusted_close']) 
-print (f"PSI for adjusted close: {psi}") 
+
 
 report = psi_report(
     df,
