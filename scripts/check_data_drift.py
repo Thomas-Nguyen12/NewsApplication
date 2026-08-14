@@ -182,8 +182,8 @@ def main() -> None:
         with open(f"{BASE_DIR}/logs/vinfast_data_drift_logs.txt", 'a') as f:
             f.write("----------------------------------\n")
 
-            f.write(f"Date: {localtime}")
-            f.write(f"Data Drift: NOT DETECTED")
+            f.write(f"Date: {localtime}\n")
+            f.write(f"Data Drift: NOT DETECTED\n")
             f.write("\n\n\n")
             f.close()         
 
