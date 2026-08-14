@@ -173,7 +173,8 @@ def main() -> None:
 
             f.write(f"Date: {localtime}")
             f.write(f"Data Drift: DETECTED")
-            f.write(f"{significant['feature'].tolist()}")
+            f.write(f"{significant['feature'].tolist()}\n")
+            f.write(f"WARNING: Update the model")
             f.write("\n\n\n")
             f.close() 
         
@@ -182,7 +183,7 @@ def main() -> None:
         with open(f"{BASE_DIR}/logs/vinfast_data_drift_logs.txt", 'a') as f:
             f.write("----------------------------------\n")
 
-            f.write(f"Date: {localtime}\n")
+            f.write(f"Current Date: {localtime}\n")
             f.write(f"Data Drift: NOT DETECTED\n")
             f.write("\n\n\n")
             f.close()         
