@@ -55,6 +55,15 @@ jobs:
           run: |
             uv pip install --system -r requirements.txt
 
+        - name: Checking for Data Drift 
+          run: |
+            python3 scripts/check_data_drift.py 
+
+        - name: Report Failure of Data Drift detection script
+          if: failure()  
+          run: |
+            echo "::error:: There was an error with the script for data drift detection. \
+            Please check your scripts."
           
           
     
