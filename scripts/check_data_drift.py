@@ -172,7 +172,7 @@ def main() -> None:
             f.write("----------------------------------\n")
 
             f.write(f"Date: {localtime}")
-            f.write(f"Data Drift: DETECTED")
+            f.write(f"Data Drift: DETECTED\n")
             f.write(f"{significant['feature'].tolist()}\n")
             f.write(f"WARNING: Update the model")
             f.write("\n\n\n")
