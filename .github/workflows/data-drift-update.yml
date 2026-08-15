@@ -66,8 +66,21 @@ jobs:
           run: |
             echo "::error:: There was an error with the script for data drift detection. \
             Please check your scripts."
-          
-        # including the logs 
+
+        - name: Send drift alert email
+          if: steps.drift_check.outputs.drift_detected == 'true'
+          uses: dawidd6/action-send-mail@v3
+          with:
+            server_address: smtp.gmail.com
+            server_port: 465
+            username: ${{ secrets.MAIL_USERNAME }}
+            password: ${{ secrets.MAIL_PASSWORD }}
+            subject: "⚠️ VinFast model drift detected"
+            to: thomas.nguyen3612@gmail.com
+            from: GitHub Actions
+            body: "Data drift was detected in the VinFast pipeline. Check the logs at ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            
+          # including the logs 
 
         - name: Commit and Push result
           run: |

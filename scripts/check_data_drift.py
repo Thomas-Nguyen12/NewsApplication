@@ -151,9 +151,6 @@ def main() -> None:
 
     print("Loading the original saved dataset...")
     df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv")
-    print ("================ DEBUG COLUMNS") 
-    print (df.columns)
-    print ("================= END DEBUG")
     print("Investigating Data Drift...")
     report = psi_report(
         df,
@@ -163,32 +160,33 @@ def main() -> None:
     print(report)
 
     significant = report[report["status"] == "significant"]
+
     if not significant.empty:
         print("Significant drift detected in:", significant["feature"].tolist())
-        result="true"
-        # raise SystemExit(1)  # uncomment to fail a CI/CD job on drift
-    # How Do i send an email to myself? 
+        result = "true"
 
-        with open(f"{BASE_DIR}/logs/vinfast_data_drift_logs.txt", 'a') as f:
+        with open(f"{BASE_DIR}/logs/vinfast_data_drift_logs.txt", "a") as f:
             f.write("----------------------------------\n")
-
-            f.write(f"Date: {localtime}")
-            f.write(f"Data Drift: DETECTED\n")
+            f.write(f"Date: {localtime}\n")
+            f.write("Data Drift: DETECTED\n")
             f.write(f"{significant['feature'].tolist()}\n")
-            f.write(f"WARNING: Update the model")
-            f.write("\n\n\n")
-            f.close() 
-        
-    
-    else: 
-        result="false"
-        with open(f"{BASE_DIR}/logs/vinfast_data_drift_logs.txt", 'a') as f:
+            f.write("WARNING: Update the model\n\n\n")
+    else:
+        result = "false"
+        with open(f"{BASE_DIR}/logs/vinfast_data_drift_logs.txt", "a") as f:
             f.write("----------------------------------\n")
-
             f.write(f"Current Date: {localtime}\n")
-            f.write(f"Data Drift: NOT DETECTED\n")
-            f.write("\n\n\n")
-            f.close()         
+            f.write("Data Drift: NOT DETECTED\n\n\n")
+
+    # Surface the result as a GitHub Actions step output, if running in CI
+    github_output = os.environ.get("GITHUB_OUTPUT")
+    if github_output:
+        with open(github_output, "a") as f:
+            f.write(f"drift_detected={result}\n")
+
+
+if __name__ == "__main__":
+    main()     
 
 
 if __name__ == "__main__":
