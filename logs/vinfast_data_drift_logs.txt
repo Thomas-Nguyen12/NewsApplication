@@ -17,3 +17,9 @@ Date: 14-8-2026Data Drift: DETECTED
 WARNING: Update the model
 
 
+----------------------------------
+Date: 15-8-2026Data Drift: DETECTED
+['adjusted_close', 'close', 'low', 'open', 'high', 'volume']
+WARNING: Update the model
+
+
