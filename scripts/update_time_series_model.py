@@ -37,6 +37,10 @@ close_clf = joblib.load(os.path.join(BASE_DIR, "models/time_series/vinfast/vinfa
 df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv") 
 df['date'] = pd.to_datetime(df['date']) 
 
+# removing volume
+df.drop(['volume', 'close'],axis=1,inplace=True)
+
+
 # sorting the dataframe by date
 df = df.sort_values(['date'],ascending=True) 
 
@@ -150,7 +154,7 @@ def main():
 
     for target_column in cleaned_df.columns: 
         # not using volume 
-        if target_column != 'day' and target_column != 'month' and target_column != 'year' and target_column != 'date' and 'volume' not in target_column and target_column != 'close' and target_column != 'adjusted_close' and target_column != 'high':
+        if target_column != 'day' and target_column != 'month' and target_column != 'year' and target_column != 'close':
             X, y, X_train, X_test, Y_train, Y_test = split_train_test(df=cleaned_df, target_column=target_column)
             # I can store the data into a dictionary for linear time search 
             

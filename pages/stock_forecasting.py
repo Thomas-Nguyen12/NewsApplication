@@ -104,16 +104,15 @@ close_ = df.tail(1)['adjusted_close'].values[0]
 high_ = df.tail(1)['high'].values[0]
 low_ = df.tail(1)['low'].values[0]
 
-test = forecaster(
-    input_date=pd.to_datetime(minimum_market_date),
-    n_periods=(date_range - minimum_market_date).days,
-    seed_open=open_,
-    seed_close=close_,
-    seed_high=high_,
-    seed_low=low_,
-    
-)
 
+test = forecaster(
+    input_date           = pd.to_datetime(minimum_market_date),
+    n_periods             = (date_range - minimum_market_date).days,
+    seed_open             = open_,
+    seed_high             = high_,
+    seed_low              = low_, 
+    seed_adjusted_close   = close_,   
+)
 # running the forecaster
 forecast = test.forecast()
 st.divider()
