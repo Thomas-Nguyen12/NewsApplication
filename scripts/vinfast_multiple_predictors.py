@@ -10,9 +10,9 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
 
 open_clf  = joblib.load(f"{BASE_DIR}/models/time_series/vinfast/vinfast_open_isolation_forest_cleaned_forecaster.pkl")
-high_clf  = joblib.load(f"{BASE_DIR}/models/time_series/vinfast/vinfast_high_isolation_forest_forecaster_cleaned.pkl")
-low_clf   = joblib.load(f"{BASE_DIR}/models/time_series/vinfast/vinfast_low_isolation_forest_forecaster_cleaned.pkl")
-close_clf = joblib.load(f"{BASE_DIR}/models/time_series/vinfast/vinfast_adjusted_close_isolation_forest_forecaster_cleaned.pkl")
+high_clf  = joblib.load(f"{BASE_DIR}/models/time_series/vinfast/vinfast_high_isolation_forest_cleaned_forecaster.pkl")
+low_clf   = joblib.load(f"{BASE_DIR}/models/time_series/vinfast/vinfast_low_isolation_forest_cleaned_forecaster.pkl")
+close_clf = joblib.load(f"{BASE_DIR}/models/time_series/vinfast/vinfast_adjusted_close_isolation_forest_cleaned_forecaster.pkl")
 
 nasdaq = mcal.get_calendar("NASDAQ")
 
