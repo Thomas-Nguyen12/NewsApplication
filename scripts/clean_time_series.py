@@ -46,79 +46,78 @@ print ("    1. all columns have been converted to lowercase")
 print ("    2. all missing/erroenous values have been corrected") 
 # This is an unsupervised technique
 class clean_isolation_forest:
+    """Uses the isolation forest unsupervised technique to identify and clean anomalies."""
 
-    def __init__(self, df: pd.DataFrame) -> pd.DataFrame: 
-        print ("-----------------------------")
-        print ("this is the clean_isolation_forest class. This uses the isolation forest unsupervised technique to identify anomalies...") 
-        self.df = df
+    def __init__(self, df: pd.DataFrame):
+        print("-----------------------------")
+        print("this is the clean_isolation_forest class. This uses the isolation forest "
+              "unsupervised technique to identify anomalies...")
+
+        self.df = df.copy()
         self.df.columns = self.df.columns.str.lower()
-
-
-
 
         # doing some preemptive formatting
         if 'date' in self.df.columns:
-
-            self.df.index = pd.to_datetime(df['date']) 
-            self.df.drop(['date'],axis=1,inplace=True)
-
+            self.df.index = pd.to_datetime(self.df['date'])
+            self.df.drop(['date'], axis=1, inplace=True)
 
             self.df['day'] = self.df.index.day
-            self.df['month'] = self.df.index.month 
+            self.df['month'] = self.df.index.month
             self.df['year'] = self.df.index.year
-
-        # checking if the date is in the index
-        elif self.df.index == pd.to_datetime(self.df.index): 
-            self.df.index = pd.to_datetime(self.df.index)
-            print ("The datetime is in the index... moving on...")
-        
         else:
-            print ("Please check the formatting of the date column")
+            print("Please check the formatting of the date column")
+
+    def fit_transform(self) -> pd.DataFrame:
+        skip_cols = {"day", "month", "year"}
+        columns_to_keep=['day','month', 'year']
+        for column in self.df.columns:
+            if column in skip_cols or column.endswith(('_anomaly', '_anomaly_score', '_is_anomaly', '_isolation_forest_cleaned')):
+
+                continue
+
+            median = self.df[column].median()
+
+            # IsolationForest needs a 2D array — pass a single-column DataFrame, not a Series
+            column_values = self.df[[column]]
+
+            iso_forest = IsolationForest(
+                contamination='auto',
+                random_state=42,
+                n_estimators=100
+            )
+
+            self.df[f'{column}_anomaly'] = iso_forest.fit_predict(column_values)
+            self.df[f'{column}_anomaly_score'] = iso_forest.decision_function(column_values)
+
+            # -1 = anomaly, 1 = normal
+            self.df[f'{column}_is_anomaly'] = self.df[f'{column}_anomaly'] == -1
+
+            anomalies = self.df[self.df[f'{column}_is_anomaly']][[f'{column}_anomaly_score']]
+            print(f"Found {len(anomalies)} anomalies out of {len(self.df)} records for '{column}'")
+            print(anomalies)
+
+            print("Imputing with median...")
+            self.df[f'{column}_isolation_forest_cleaned'] = np.where(
+                self.df[f'{column}_is_anomaly'], median, self.df[column]
+            )
+            columns_to_keep.append(f"{column}_isolation_forest_cleaned")
+        
+        # keeping the relevant columns 
+        print (columns_to_keep) 
+        print (self.df) 
 
 
+        self.df = self.df[[*columns_to_keep]]
 
-    def fit_transform(self) -> pd.DataFrame: 
-        # this action will be performed on self.df
-        for column in self.df.columns: 
-                if column != "day" and column != "month" and column != "year":
-                    median = self.df[column].median() 
-                    column_anomalies = self.df[column].copy() 
+        return self.df
 
 
-                    iso_forest = IsolationForest(
-                        contamination='auto',  # Expected proportion of anomalies (5%)
-                        random_state=42,
-                        n_estimators=100
-                    )
-
-                    self.df[f'{column}_anomaly'] = iso_forest.fit_predict(column_anomalies)
-                    self.df[f'{column}_anomaly_score'] = iso_forest.decision_function(column_anomalies)
-
-                    # -1 = anomaly, 1 = normal
-                    self.df[f'{column}_is_anomaly'] = self.df[f'{column}_anomaly'] == -1
-
-                    # View anomalies
-                    anomalies = self.df[self.df['is_anomaly']][['date', 'high', f'{column}_anomaly_score']]
-                    print(f"Found {len(anomalies)} anomalies out of {len(self.df)} records")
-                    print(anomalies)
-                    
-                    # imputing with median 
-                    print ("Imputing with median...")
-                    self.df[f"{column}_isolation_forest_cleaned"] = [median if anomaly == True else anomaly for anomaly in self.df[f'{column}_is_anomaly']]
-                else:
-                    pass
-
-        result = self.df
-
-
-
-        return result
-    
-    def build_lagging(self, dataframe: pd.DataFrame) -> pd.DataFrame:
+   
+    def build_lagging(self) -> pd.DataFrame:
 
     # building the lagging
         print ("Created the lagged values...")
-        for column in dataframe.columns: 
+        for column in self.df.columns: 
 
             if column != 'year' and column != 'month' and column !='day': 
                 """
@@ -126,23 +125,18 @@ class clean_isolation_forest:
                 lagged_volume = np.insert(lagged_volume, 0, 0)
                 lagged_volume = lagged_volume[:-1]
                 """
-                lagged_values = dataframe[column].values
+                lagged_values = self.df[column].values
                 lagged_values = np.insert(lagged_values, 0, 0) 
                 lagged_values = lagged_values[:-1]
 
-                dataframe[f"lagged_{column}"] = lagged_values
+                self.df[f"lagged_{column}"] = lagged_values
         # removing the first row
         print ("Removing the first row")
 
-        result = dataframe.iloc[1:]
-        print ("renaming the columns...")
-        
-        for column in result.columns:
-            
-            # renaming
-            if column != "day" and column != "month" and column != "year":
+        result = self.df.iloc[1:]
 
-                result.rename({f"{column}": f"lagged_{column}"},axis=1, inplace=True)
+        
+
         return result
 
 
