@@ -115,11 +115,7 @@ def build_model(X_train: pd.DataFrame, Y_train, X_test: pd.DataFrame):
     pred = model.predict(X_test) 
 
     # optimising 
-    params={
-        'eta': [0.01, 0.1, 0.3],
-        'max_depth': [10, 15, 20, 25, 30, 35, 40],
-        ''
-    }
+
 
     return model, pred  
 
