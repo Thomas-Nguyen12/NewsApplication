@@ -108,6 +108,8 @@ class clean_isolation_forest:
 
 
         self.df = self.df[[*columns_to_keep]]
+        print (f"COLUMNS -> {self.df.columns}")
+        
 
         return self.df
 
@@ -129,7 +131,7 @@ class clean_isolation_forest:
                 lagged_values = np.insert(lagged_values, 0, 0) 
                 lagged_values = lagged_values[:-1]
 
-                self.df[f"lagged_{column}"] = lagged_values
+                self.df[f"{column}"] = lagged_values
         # removing the first row
         print ("Removing the first row")
 
