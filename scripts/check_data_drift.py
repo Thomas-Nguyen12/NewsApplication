@@ -165,6 +165,7 @@ def main() -> None:
     significant = report[report["status"] == "significant"]
     if not significant.empty:
         print("Significant drift detected in:", significant["feature"].tolist())
+        result="true"
         # raise SystemExit(1)  # uncomment to fail a CI/CD job on drift
     # How Do i send an email to myself? 
 
@@ -180,6 +181,7 @@ def main() -> None:
         
     
     else: 
+        result="false"
         with open(f"{BASE_DIR}/logs/vinfast_data_drift_logs.txt", 'a') as f:
             f.write("----------------------------------\n")
 
