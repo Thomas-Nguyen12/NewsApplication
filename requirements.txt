@@ -20,3 +20,4 @@ shap==0.48.0
 streamlit==1.53.1
 streamlit-shap==1.0.2
 xgboost==3.0.5
+langchain-openai=='1.5.2' 
