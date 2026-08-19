@@ -49,3 +49,17 @@ Data Drift: DETECTED
 WARNING: Update the model
 
 
+----------------------------------
+Date: 16-8-2026
+Data Drift: DETECTED
+['adjusted_close', 'close', 'low', 'open', 'high', 'volume']
+WARNING: Update the model
+
+
+----------------------------------
+Date: 16-8-2026
+Data Drift: DETECTED
+['adjusted_close', 'close', 'low', 'open', 'high', 'volume']
+WARNING: Update the model
+
+
