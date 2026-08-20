@@ -152,6 +152,22 @@ def main() -> None:
     print("Loading the original saved dataset...")
     df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv")
     print("Investigating Data Drift...")
+
+
+    # removing the overlap between the two datasets
+    # I can concatenate them and then remove the unneeded data
+    print ("Concatenating the data...")
+    eod_data_df = pd.concat([df, eod_data], axis=0)
+
+    max_of_duplicates = max(eod_data_df[eod_data_df['date'].duplicated() == True].index)
+    print (f"Max index of duplicates: {max_of_duplicates}")
+    print ("Removing the unnecessary data...")
+    eod_data = eod_data[eod_data.index > max_of_duplicates] 
+    print (f"EOD data timeframe: {min(eod_data['date'])} -> {max(eod_data['date'])}")
+
+
+
+
     report = psi_report(
         df,
         eod_data,
@@ -169,6 +185,7 @@ def main() -> None:
             f.write("----------------------------------\n")
             f.write(f"Date: {localtime}\n")
             f.write("Data Drift: DETECTED\n")
+            f.write(f"{report}\n\n")
             f.write(f"{significant['feature'].tolist()}\n")
             f.write("WARNING: Update the model\n\n\n")
     else:
