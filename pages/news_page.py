@@ -190,7 +190,7 @@ st.header("News Summary using Agentic AI")
 st.write("Updated once a day...")
 
 # BASE_DIR is in the pages/ directory
-with open(f"{BASE_DIR}/../data/vinfast_news_data/summarised_news_articles.md", 'r') as f: 
+with open(f"../data/vinfast_news_data/summarised_news_articles.md", 'r') as f: 
     summary = f.read()
     st.markdown(summary) 
     f.close()
