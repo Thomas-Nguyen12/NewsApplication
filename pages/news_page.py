@@ -187,7 +187,7 @@ st.plotly_chart(fig)
 
 # opening the summary file 
 st.header("News Summary using Agentic AI")
-st.write("Updated once a day...")
+st.info("Updated once a day...")
 
 # BASE_DIR is in the pages/ directory
 BASE_DIR2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
