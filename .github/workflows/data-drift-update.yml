@@ -90,19 +90,6 @@ jobs:
             git commit -m "Added a new file that lists features that have possible undergone data drift" || echo "No changes to commit"
             git push
 
-        - name: Retrain the model 
-          if: steps.check_data_drift.outputs.result == 'success'
-          run: python3 scripts/update_time_series_model.py
-        
-        - name: Saving the new models
-          run: |
-            git config user.name "Thomas-Nguyen12"
-            git config user.email "thomas.nguyen3612@gmail.com"
-            git pull
-            git add models/time_series/vinfast/*.pkl
-            git add data/vinfast_data_cleaned.csv 
-            git commit -m "Retrained the vinfast models and saved the updated dataset" || echo "No changes to commit"
-            git push
 
 
         - name: Report Failure for model retraining detection script
