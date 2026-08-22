@@ -100,7 +100,8 @@ jobs:
             git config user.email "thomas.nguyen3612@gmail.com"
             git pull
             git add models/time_series/vinfast/*.pkl
-            git commit -m "Retrained the vinfast models" || echo "No changes to commit"
+            git add data/vinfast_data_cleaned.csv 
+            git commit -m "Retrained the vinfast models and saved the updated dataset" || echo "No changes to commit"
             git push
 
 
