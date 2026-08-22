@@ -27,7 +27,7 @@ on:
 
 jobs: 
   # name of the job 
-  vinfast-stock-code-testing: 
+  vinfast-news-summarising-testing: 
     runs-on: ubuntu-latest
 
     steps:
