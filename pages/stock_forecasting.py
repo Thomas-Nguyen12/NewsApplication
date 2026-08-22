@@ -24,7 +24,8 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 st.title("Vinfast Stock Forecasting")
-st.subheader("Please note: This section is still being refined...")
+
+st.info("Please note: This section is still being refined...", icon="ℹ️")
 # I can include a streamlit slider 
 with st.sidebar: 
     st.header("Navigation Bar")
