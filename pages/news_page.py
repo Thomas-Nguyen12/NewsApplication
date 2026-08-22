@@ -204,6 +204,7 @@ vinfast_news_to_display = vinfast_news[['title', 'url', 'sentiment', 'confidence
 
 vinfast_news_to_display.index = pd.to_datetime(vinfast_news['publishedAt'])
 vinfast_news_to_display = vinfast_news_to_display.sort_index(ascending=False) 
+vinfast_news_to_display = vinfast_news_to_display.drop_duplicates(subset=['title'])
 # displaying the table in tabular format
 
 
