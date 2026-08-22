@@ -33,9 +33,10 @@ high_clf  = joblib.load(os.path.join(BASE_DIR, "models/time_series/vinfast/vinfa
 low_clf   = joblib.load(os.path.join(BASE_DIR, "models/time_series/vinfast/vinfast_low_forecaster.pkl"))
 close_clf = joblib.load(os.path.join(BASE_DIR, "models/time_series/vinfast/vinfast_adjusted_close_forecaster.pkl"))
 """
-
+print ("Loading original dataset...")
 df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv") 
 df['date'] = pd.to_datetime(df['date']) 
+print (f"original dataset size: {df.shape}")
 
 # removing volume
 df.drop(['volume', 'close'],axis=1,inplace=True)
@@ -44,6 +45,18 @@ df.drop(['volume', 'close'],axis=1,inplace=True)
 # sorting the dataframe by date
 df = df.sort_values(['date'],ascending=True) 
 
+print ("Loading EOD data...") 
+eod_data = load_eod_data() 
+
+print ("Concatenating...")  
+df = pd.concat([df, eod_data],axis=0) 
+
+print (f"Concatenated dataset size (with duplicates): {df.shape}") 
+
+print ("Dropping duplicates...")
+df = df.drop_duplicates() 
+
+print (f"Concatenated dataset size (without duplicates): {df.shape}")
 
 
 def clean_dataframe(df: pd.DataFrame): 
@@ -168,8 +181,11 @@ def main():
             print ("Generating metrics...") 
             print (f"Target column: {target_column}")
             print (generate_metrics(model, X_train, X_test, Y_train, Y_test, X, y))
+            
             joblib.dump(model, f"{BASE_DIR}/models/time_series/vinfast/vinfast_{target_column}_forecaster.pkl")
-
+    # saving the new dataset 
+    print ("Saving the new dataset...")
+    df.to_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv")
     print ("Done")
     # the format for "models" is {"model": [model, pred, ]}
 
