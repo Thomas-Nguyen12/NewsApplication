@@ -33,9 +33,14 @@ with st.sidebar:
 
 # I will use the interactive plot library plotly
 # ------------------- creating the set of predictions 
+@st.cache_data 
+def load_vinfast_multiple_predictors(): 
 
-from vinfast_multiple_predictors import forecaster
+    from vinfast_multiple_predictors import forecaster
+    return forecaster 
 
+    
+forecaster = load_vinfast_multiple_predictors()
 
 
 # Collecting live data 
