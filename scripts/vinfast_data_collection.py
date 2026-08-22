@@ -23,9 +23,11 @@ from preprocessing import lemmatize
 #
 #
 #
+news_api_key = st.secrets['news_api_key']
+eod_key = st.secrets["fin_historical_data"]
 def check_vinfast_status_code(): 
 
-        news_api_key = st.secrets['news_api_key']
+        
         vinfast_request = requests.get(f"https://newsapi.org/v2/everything?q=vinfast&apiKey={news_api_key}&language=en")
         return vinfast_request.status_code 
 
@@ -37,7 +39,7 @@ def load_vinfast_news():
     try:
 
 
-        news_api_key = st.secrets['news_api_key']
+        
         vinfast_request = requests.get(f"https://newsapi.org/v2/everything?q=vinfast&apiKey={news_api_key}&language=en")
         vinfast_news = json_normalize(vinfast_request.json()['articles'])
 
@@ -52,7 +54,7 @@ def load_vinfast_news():
 #
 #
 def check_eod_status_code(): 
-        eod_key = st.secrets["fin_historical_data"]
+        
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv")
         eod_request = requests.get(f"https://eodhd.com/api/eod/VFS?api_token={eod_key}&fmt=json")
@@ -64,7 +66,7 @@ def load_eod_data():
 
     try:
         
-        eod_key = st.secrets["fin_historical_data"]
+        
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         df = pd.read_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv")
         eod_request = requests.get(f"https://eodhd.com/api/eod/VFS?api_token={eod_key}&fmt=json")

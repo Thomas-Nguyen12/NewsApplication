@@ -8,11 +8,18 @@ import sys
 import joblib 
 from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
 from xgboost import XGBRegressor 
+from skopt import BayesSearchCV
+
 
 # metrics 
 from sklearn.metrics import r2_score, mean_absolute_error, root_mean_squared_error
 
+""" 
+This script will be for the comprehensive retraining of xgboost financial models
 
+These models predict the opening, adjusted_close, high and low prices of vinfast stock prices
+
+"""
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -158,6 +165,40 @@ def generate_metrics(model, X_train, X_test, Y_train, Y_test, X, y):
     print ("Done\n")
 
 
+def model_optimisation(X_train, Y_train): 
+    # Note that these are params for an XGBOOst model 
+
+    # make sure that when you save the models, you access the inner wrapper
+    # grid search models 
+    print ("Setting the params...")
+    params = {
+        'max_depth': [0, 10, 15, 20,25, 30],
+        'eta': [0.1,0.01, 0.2, 0.02, 0.3],
+        'min_child_weight': [0, 1, 2]
+    }
+    print (f"Params: {params}")
+
+    print ("Creating the GridSearchCV framework...")
+    booster = GridSearchCV(
+        estimator=XGBRegressor,
+        params=params,
+        cv=5,
+        scoring='r2',
+        n_jobs=-1
+    )
+    print ("Fitting the GridSearchCV...")
+    booster.fit(X_train, Y_train)
+
+    # returning the model 
+    print (f"Best scores: {booster.best_score_}")
+    print (f"Best parameters: {booster.best_params_}")
+    print ("\n\n")
+    best_booster = booster.best_estimator_
+    
+    print ("returning the best model...") 
+    return best_booster
+
+
 
 # training models and cleaning 
 
@@ -192,13 +233,22 @@ def main():
 
             print ("Generating metrics...") 
             print (f"Target column: {target_column}")
+            print ("Metrics before optimisation...")
             print (generate_metrics(model, X_train, X_test, Y_train, Y_test, X, y))
 
-            joblib.dump(model, f"{BASE_DIR}/models/time_series/vinfast/vinfast_{target_column}_forecaster.pkl")
+            # optimising the model
+            best_model = model_optimisation(X_train=X_train, Y_train=Y_train) 
+
+
+            # generating metrics after optimisation
+            generate_metrics(best_model, X_train=X_train, Y_train=Y_train, Y_test=Y_test, X=X, y=y)
+
+            print ("Saving the best model...")
+            joblib.dump(best_model, f"{BASE_DIR}/models/time_series/vinfast/vinfast_{target_column}_forecaster.pkl")
     # saving the new dataset 
     print ("Saving the new dataset...")
     eod_df[['volume','close']] = eod_df_volume_close
-    eod_df.to_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv", header=False)
+    eod_df.to_csv(f"{BASE_DIR}/data/vinfast_data_cleaned.csv", header=True, index=False)
     print ("Done")
     # the format for "models" is {"model": [model, pred, ]}
 

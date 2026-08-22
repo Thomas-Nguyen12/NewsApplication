@@ -26,6 +26,9 @@ from preprocessing import lemmatize
 import preprocessing 
 from sentiment_analyser import analyser
 
+# agentic ai script
+
+
 
 with st.sidebar:
     st.header("Navigation Bar")
@@ -156,6 +159,9 @@ print (vinfast_news.columns)
 vinfast_news['publishedAt'] = pd.to_datetime(vinfast_news['publishedAt'])
 print ("--------------------------------- VINFAST NEWS")
 
+
+
+
 print (vinfast_news)
 grouped_news_sentiment = vinfast_news 
 grouped_news_sentiment['publishedAt'] = vinfast_news['publishedAt'].dt.date
@@ -176,7 +182,21 @@ fig = px.bar(grouped_news_sentiment, x='publishedAt', y='sentiment_count', color
     barmode='group', title="Recent News Sentiment Frequency",
     labels={'sentiment_count': 'Number of News Articles'})
 st.plotly_chart(fig)
+# showing the summary of the vinast news reports using agentic ai 
 
+
+# opening the summary file 
+st.header("News Summary using Agentic AI")
+st.write("Updated once a day...")
+
+# BASE_DIR is in the pages/ directory
+with open(f"data/vinfast_news_data/summarised_news_articles.md", 'r') as f: 
+    summary = f.read()
+    st.markdown(summary) 
+    f.close()
+
+
+st.divider()
 
 vinfast_news_to_display = vinfast_news[['title', 'url', 'sentiment', 'confidence (%)']]
 
@@ -188,4 +208,7 @@ vinfast_news_to_display = vinfast_news_to_display.sort_index(ascending=False)
 
 
 
-st.dataframe(vinfast_news_to_display) 
+with st.expander("View Raw Data"):
+
+    st.dataframe(vinfast_news_to_display) 
+
