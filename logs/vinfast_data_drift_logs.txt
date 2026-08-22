@@ -107,3 +107,33 @@ Data Drift: DETECTED
 WARNING: Update the model
 
 
+----------------------------------
+Date: 22-8-2026
+Data Drift: DETECTED
+          feature       psi       status
+0             low  7.322796  significant
+1  adjusted_close  7.305268  significant
+2           close  7.305268  significant
+3          volume  7.196112  significant
+4            open  6.975081  significant
+5            high  5.916676  significant
+
+['low', 'adjusted_close', 'close', 'volume', 'open', 'high']
+WARNING: Update the model
+
+
+----------------------------------
+Date: 22-8-2026
+Data Drift: DETECTED
+          feature       psi       status
+0             low  7.322796  significant
+1  adjusted_close  7.305268  significant
+2           close  7.305268  significant
+3          volume  7.196112  significant
+4            open  6.975081  significant
+5            high  5.916676  significant
+
+['low', 'adjusted_close', 'close', 'volume', 'open', 'high']
+WARNING: Update the model
+
+
