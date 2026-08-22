@@ -17,6 +17,7 @@ from langchain_groq import ChatGroq
 import streamlit as st
 from langchain_core.prompts import ChatPromptTemplate
 from vinfast_data_collection import load_vinfast_news
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 @tool('summarise_vinfast_news_reports', description='summarise The News Reports from The Vinfast News API', return_direct=False)
 def summarise_vinfast_news_reports():
@@ -57,7 +58,7 @@ def build_agent():
         ]
     })
     print ("Saving the summary to a file...")
-    with open(f"{BASE_DIR}/../data/vinfast_news_data/summarised_news_articles.md", "w") as f: 
+    with open(f"{BASE_DIR}/data/vinfast_news_data/summarised_news_articles.md", "w") as f: 
         f.write(response['messages'][-1].content)
         f.close() 
     
