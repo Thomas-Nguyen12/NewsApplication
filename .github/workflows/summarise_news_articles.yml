@@ -41,7 +41,9 @@ jobs:
           groq_api_key: ${{ secrets.GROQ_API_KEY }}
         run: |
           mkdir -p .streamlit 
-          echo "fin_historical_data = \"$groq_api_key\"" >> .streamlit/secrets.toml
+          echo "GROQ_API_KEY = \"$groq_api_key\"" >> .streamlit/secrets.toml
+          echo "news_api_key = \"$news_api_key\"" >> .streamlit/secrets.toml
+          echo "fin_historical_data = \"$eod_key\"" >> .streamlit/secrets.toml
 
       - name: Set up UV
         uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
