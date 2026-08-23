@@ -20,7 +20,7 @@ on:
   schedule: 
     # run this workflow at 08:00 UTC once a week to check if the data collection
     # works
-    - cron: '0 8 * * 1'
+    - cron: '0 8 * * *'
   
   # adding a manual "run workflow" button" 
   workflow_dispatch: {} 
