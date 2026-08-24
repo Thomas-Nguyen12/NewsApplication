@@ -1,0 +1,1 @@
+I'm sorry, but I wasn't able to retrieve any news reports about VinFast at this moment. Is there anything else I can help you with?
