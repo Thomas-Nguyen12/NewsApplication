@@ -64,6 +64,7 @@ jobs:
         run: |
           git config user.name "Thomas-Nguyen12"
           git config user.email "thomas.nguyen3612@gmail.com"
+          git pull
           git rm data/vinfast_news_data/summarised_news_articles.md
           git commit -m "Removed the previous summary"
           git push 
