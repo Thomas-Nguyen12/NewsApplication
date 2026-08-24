@@ -54,7 +54,7 @@ def build_agent():
         # testing the code works 
     response = news_agent.invoke({
         'messages': [
-            {'role': 'user', 'content': 'Summarise the news reports about vinfast using the tools provided. The tool should use a news api to collect news data'}
+            {'role': 'user', 'content': 'Summarise the news reports about vinfast'}
         ]
     })
     print ("Showing the response...")
