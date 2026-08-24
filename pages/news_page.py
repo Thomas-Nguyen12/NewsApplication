@@ -26,6 +26,11 @@ from preprocessing import lemmatize
 import preprocessing 
 from sentiment_analyser import analyser
 
+@st.cache_data 
+def load_build_agent():
+
+    from create_reports import build_agent
+    return build_agent() 
 # agentic ai script
 
 
@@ -187,15 +192,19 @@ st.plotly_chart(fig)
 
 # opening the summary file 
 st.header("News Summary using Agentic AI")
-st.info("Updated once a day...", icon="ℹ️")
+st.info("Press the Refresh button to refresh the news summary..", icon="ℹ️")
 
 # BASE_DIR is in the pages/ directory
 BASE_DIR2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-with open(f"{BASE_DIR2}/data/vinfast_news_data/summarised_news_articles.md", 'r') as f: 
-    summary = f.read()
-    st.markdown(summary) 
-    f.close()
+# I need to find a way to limit the number of refreshes
+refresh_button=st.button("Refresh news summary")
+if refresh_button:
+    summary = load_build_agent() 
+    st.markdown(summary)
+else:
+    summary = load_build_agent() 
+    st.markdown(summary)
 
 
 st.divider()
