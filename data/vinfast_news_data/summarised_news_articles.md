@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Here is a summary of the latest news reports regarding VinFast and its parent company, Vingroup:
 
 **🌍 Global Expansion & Market Entry**
@@ -18,3 +19,6 @@ Here is a summary of the latest news reports regarding VinFast and its parent co
 Overall, VinFast is in a rapid growth phase, focusing heavily on international market penetration (particularly in Southeast Asia and Europe), strategic financial partnerships, and expanding its smart mobility ecosystem, while its parent company Vingroup diversifies into the space sector. 
 
 Let me know if you'd like more details on any specific region or partnership! 😊
+=======
+I'm sorry, but I wasn't able to retrieve any news reports about VinFast at this moment. Is there anything else I can help you with?
+>>>>>>> 40e4a831667b4d9558d2c8d5bdfeb24de2ae3f62
