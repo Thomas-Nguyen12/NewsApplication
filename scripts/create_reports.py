@@ -57,8 +57,14 @@ def build_agent():
             {'role': 'user', 'content': 'Summarise the news reports about vinfast. The news reports are in a dataframe that contains columns such as the title and content. '}
         ]
     })
-    print ("Saving the summary to a file...")
+    print ("Showing the response...")
+    print (response['messages'][-1].content)
+
     
+    print ("Saving the summary to a file...")
+
+    
+
     with open(f"{BASE_DIR}/data/vinfast_news_data/summarised_news_articles.md", "w") as f: 
         f.write(response['messages'][-1].content)
         f.close() 
