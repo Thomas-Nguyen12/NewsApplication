@@ -48,13 +48,13 @@ def build_agent():
     news_agent = create_agent(
         model=llm,
         tools=[summarise_vinfast_news_reports],
-        system_prompt='You are a helpful news assistant who is always friendly.'
+        system_prompt='You are a helpful news assistant who is always friendly. You are usually provided with a news report dataframe'
     )
     print ("Invoking the response...")
         # testing the code works 
     response = news_agent.invoke({
         'messages': [
-            {'role': 'user', 'content': 'Summarise the news reports about vinfast'}
+            {'role': 'user', 'content': 'Summarise the news reports about vinfast. The news reports are in a dataframe'}
         ]
     })
     print ("Showing the response...")
