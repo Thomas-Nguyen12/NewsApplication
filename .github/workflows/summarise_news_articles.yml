@@ -60,14 +60,6 @@ jobs:
         run: |
           uv pip install --system -r requirements.txt
       
-      - name: Remove previous News summary 
-        run: |
-          git config user.name "Thomas-Nguyen12"
-          git config user.email "thomas.nguyen3612@gmail.com"
-          git pull
-          git rm data/vinfast_news_data/summarised_news_articles.md
-          git commit -m "Removed the previous summary"
-          git push 
 
       - name: Summarise news articles
         # Is there a way to load only the load_vinfast_news function? 
