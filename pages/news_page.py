@@ -8,6 +8,7 @@ import re
 import shap
 import os
 import spacy
+import time 
 
 
 import streamlit as st
@@ -21,7 +22,8 @@ SCRIPTS_DIR = (BASE_DIR / "scripts").resolve()
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-    
+
+# including api key
 from preprocessing import lemmatize 
 import preprocessing 
 from sentiment_analyser import analyser
@@ -199,7 +201,9 @@ BASE_DIR2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # I need to find a way to limit the number of refreshes
 refresh_button=st.button("Refresh news summary")
+
 if refresh_button:
+    st.write(f"Last Updated: {time.asctime(time.localtime(time.time()) )}")
     summary = load_build_agent() 
     st.markdown(summary)
 else:
