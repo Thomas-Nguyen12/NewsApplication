@@ -58,6 +58,7 @@ def build_agent():
         ]
     })
     print ("Saving the summary to a file...")
+    
     with open(f"{BASE_DIR}/data/vinfast_news_data/summarised_news_articles.md", "w") as f: 
         f.write(response['messages'][-1].content)
         f.close() 
