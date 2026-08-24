@@ -28,11 +28,7 @@ from preprocessing import lemmatize
 import preprocessing 
 from sentiment_analyser import analyser
 
-@st.cache_data 
-def load_build_agent():
 
-    from create_reports import build_agent
-    return build_agent() 
 # agentic ai script
 
 
@@ -104,6 +100,7 @@ def load_news():
         print ("Analysis complete!") 
 
     return vinfast_news 
+
 
 
 st.set_page_config(
@@ -194,24 +191,14 @@ st.plotly_chart(fig)
 
 # opening the summary file 
 st.header("News Summary using Agentic AI")
+st.info("""I am using the free version of news api. As such, there are some issues with creating requests remotely. 
+As such, the agentic summary is limited on this website (although it works perfectly fine locally). However, I am developing a workaround""", icon="ℹ️")
 st.info("Press the Refresh button to refresh the news summary..", icon="ℹ️")
+
 
 # BASE_DIR is in the pages/ directory
 BASE_DIR2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# I need to find a way to limit the number of refreshes
-refresh_button=st.button("Refresh news summary")
-
-if refresh_button:
-    st.write(f"Last Updated: {time.asctime(time.localtime(time.time()) )}")
-    summary = load_build_agent() 
-    st.markdown(summary)
-else:
-    summary = load_build_agent() 
-    st.markdown(summary)
-
-
-st.divider()
 
 vinfast_news_to_display = vinfast_news[['title', 'url', 'sentiment', 'confidence (%)']]
 
@@ -219,6 +206,30 @@ vinfast_news_to_display.index = pd.to_datetime(vinfast_news['publishedAt'])
 vinfast_news_to_display = vinfast_news_to_display.sort_index(ascending=False) 
 
 # displaying the table in tabular format
+
+
+@st.cache_data 
+def load_summarise_news_reports():
+
+    from create_reports import build_agent
+    return build_agent
+summariser = load_summarise_news_reports() 
+# -------------------
+# I need to find a way to limit the number of refreshes
+refresh_button=st.button("Refresh news summary")
+
+if refresh_button:
+    st.write(f"Last Updated: {time.asctime(time.localtime(time.time()) )}")
+    news_summary = summariser() 
+    st.markdown(news_summary)
+else:
+    news_summary = summariser() 
+    st.markdown(news_summary)
+# -------------------
+
+
+st.divider()
+
 
 
 
