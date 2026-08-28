@@ -230,12 +230,12 @@ summariser = load_summarise_news_reports()
 refresh_button=st.button("Refresh news summary")
 
 if refresh_button:
-    st.write(f"Last Updated: {time.asctime(time.localtime(time.time()) )}")
+    st.markdown(f"Last Updated: {time.asctime(time.localtime(time.time()) )}")
     news_summary = summariser
-    st.write(news_summary)
+    st.markdown(news_summary)
 else:
     news_summary = summariser
-    st.write(news_summary)
+    st.markdown(news_summary)
 # -------------------
 
 
