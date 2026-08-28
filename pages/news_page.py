@@ -210,14 +210,59 @@ vinfast_news_to_display = vinfast_news_to_display.sort_index(ascending=False)
 
 # displaying the table in tabular format
 
+@tool('summarise_vinfast_news_reports', description='summarise The News Reports', return_direct=False)
+def summarise_vinfast_news_reports():
+    return vinfast_news[['title', 'description', 'content']]
 
-@st.cache_data 
-def load_summarise_news_reports():
 
-    from create_reports import build_agent
-    agent = build_agent() 
-    return agent
-summariser = load_summarise_news_reports() 
+# loading mistral api key
+def build_agent() -> str:
+
+    GROQ_API_KEY = st.secrets['GROQ_API_KEY']
+
+    # loading prebuild workflows 
+    print ("importing vinfast news collection module...")
+
+    llm = ChatGroq(
+        api_key=GROQ_API_KEY,
+        model="openai/gpt-oss-120b",
+        temperature=0,
+    )
+    print ("Creating the tool...")
+
+
+
+
+    print ("Creating the agent...")
+    news_agent = create_agent(
+        model=llm,
+        tools=[summarise_vinfast_news_reports],
+        system_prompt='You are a helpful news assistant who is always friendly.'
+    )
+    print ("Invoking the response...")
+        # testing the code works 
+    response = news_agent.invoke({
+        'messages': [
+            {'role': 'user', 'content': 'summarise, the news reports about vinfast'}
+        ]
+    })
+    print (f"Response type: {type(response)}")
+    print ("Showing the response...")
+    print (response['messages'][-1]) 
+
+
+    print ("---------------- DEBUG\n\n\n")
+    response_content = dict(response['messages'][-1])
+    print (f"response content: {response_content}")
+    print (f"response content content: {response_content['content']}")
+    print ("------------------\n\n\n")
+    print (f"response content content: {type(response_content['content'])}")
+    print ("Final output")
+    return response_content['content']
+    
+
+
+summariser = build_agent() 
 
 
 
