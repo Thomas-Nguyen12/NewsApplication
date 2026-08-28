@@ -215,7 +215,8 @@ vinfast_news_to_display = vinfast_news_to_display.sort_index(ascending=False)
 def load_summarise_news_reports():
 
     from create_reports import build_agent
-    return build_agent
+    agent = build_agent() 
+    return agent
 summariser = load_summarise_news_reports() 
 
 
@@ -230,11 +231,11 @@ refresh_button=st.button("Refresh news summary")
 
 if refresh_button:
     st.write(f"Last Updated: {time.asctime(time.localtime(time.time()) )}")
-    news_summary = summariser() 
-    st.markdown(news_summary)
+    news_summary = summariser
+    st.write(news_summary)
 else:
-    news_summary = summariser() 
-    st.markdown(news_summary)
+    news_summary = summariser
+    st.write(news_summary)
 # -------------------
 
 

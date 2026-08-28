@@ -20,10 +20,11 @@ from langchain_core.prompts import ChatPromptTemplate
 from vinfast_data_collection import load_vinfast_news
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-@tool('summarise_vinfast_news_reports', description='summarise The News Reports from The Vinfast News API', return_direct=False)
+@tool('summarise_vinfast_news_reports', description='summarise The News Reports', return_direct=False)
 def summarise_vinfast_news_reports():
     vinfast_news = load_vinfast_news() 
-    return vinfast_news
+    vinfast_news = vinfast_news[['title', 'description', 'content']]
+    return vinfast_news.to_markdown(index=False)
 
 
 @tool("summarise_project", description='Summarise the entire project into a report for someone to read, highlighting key skills')
@@ -35,7 +36,7 @@ def summarise_project():
 
 
 # loading mistral api key
-def build_agent():
+def build_agent() -> str:
 
     GROQ_API_KEY = st.secrets['GROQ_API_KEY']
 
@@ -44,7 +45,7 @@ def build_agent():
 
     llm = ChatGroq(
         api_key=GROQ_API_KEY,
-        model="qwen/qwen3.6-27b",
+        model="openai/gpt-oss-120b",
         temperature=0,
     )
     print ("Creating the tool...")
@@ -56,70 +57,95 @@ def build_agent():
     news_agent = create_agent(
         model=llm,
         tools=[summarise_vinfast_news_reports],
-        system_prompt='You are a helpful news assistant who is always friendly. You are usually provided with a news report dataframe'
+        system_prompt='You are a helpful news assistant who is always friendly.'
     )
     print ("Invoking the response...")
         # testing the code works 
     response = news_agent.invoke({
         'messages': [
-            {'role': 'user', 'content': 'summarise, in detail, the news reports about vinfast'}
+            {'role': 'user', 'content': 'summarise, the news reports about vinfast'}
         ]
     })
+    print (f"Response type: {type(response)}")
     print ("Showing the response...")
-    print (response['messages'][-1].content)
+    print (response['messages'][-1]) 
 
 
-    print ("Saving the summary to a file...")
-
+    print ("---------------- DEBUG\n\n\n")
+    response_content = dict(response['messages'][-1])
+    print (f"response content: {response_content}")
+    print (f"response content content: {response_content['content']}")
+    print ("------------------\n\n\n")
+    print (f"response content content: {type(response_content['content'])}")
+    print ("Final output")
+    return response_content['content']
     
 
-    with open(f"{BASE_DIR}/data/vinfast_news_data/summarised_news_articles.md", "w") as f: 
-        f.write(response['messages'][-1].content)
-        f.close() 
-    
-
-    return response['messages'][-1].content
 
 
-def summarise_project(): 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# --------------------------------------
+@tool("summarise_stock_prices", description='summarise the stock prices changes of the last week')
+def summarise_stock_prices():
+    # importing the eod data. This data will contain recent stock price data for the past year 
+    from vinfast_data_collection import load_eod_data 
+    eod_data = load_eod_data()
+    return eod_data 
+
+
+def summarise_recent_stock_prices():
     GROQ_API_KEY = st.secrets['GROQ_API_KEY']
 
     # loading prebuild workflows 
-    print ("importing vinfast news collection module...")
+    print ("This is the summarise_recent_stock_price module")
 
     llm = ChatGroq(
         api_key=GROQ_API_KEY,
-        model="qwen/qwen3.6-27b",
+        model= "openai/gpt-oss-120b",
         temperature=0,
     )
     print ("Creating the tool...")
 
 
 
-
     print ("Creating the agent...")
     news_agent = create_agent(
         model=llm,
-        tools=[summarise_vinfast_news_reports],
-        system_prompt='You are a helpful news assistant who is always friendly. You are usually provided with a news report dataframe'
+        tools=[summarise_stock_prices],
+        system_prompt='You are a helpful stock price assistant who is always friendly and likes to summarise recent stock price changes.'
     )
     print ("Invoking the response...")
         # testing the code works 
     response = news_agent.invoke({
         'messages': [
-            {'role': 'user', 'content': 'Summarise the news reports about vinfast'}
+            {'role': 'user', 'content': 'summarise the stock price changes for the past week'}
         ]
     })
-    print ("Showing the response...")
-    print (response['messages'][-1].content)
-
-
-    print ("Saving the summary to a file...")
-
-    
-
-    
+    print ("Showing the response... [response]")
+    print (response) 
+    print ("-------------------------\n\n\n")
+    print ("Showing the response [response['messages']]")
+    print (response['messages']) 
+    print ("---------------------------\n\n\n\n")
+    print ("Showing the response... [response['messages'][-1]]")
+    print (response['messages'][-1])
+    print ('-----------------------\n\n\n\n')
 
     return response['messages'][-1].content
 
@@ -128,43 +154,12 @@ def summarise_project():
 
 
 
-def summarise_news_reports(df: pd.DataFrame) -> str:
-
-    @tool("summarise_dataframe", description="Returns the news reports dataframe as readable text for summarization")
-    def summarise_dataframe(df=df) -> str:
-        """Return the news report dataframe as a markdown table for the LLM to read."""
-        return df.to_markdown(index=False)
-
-    GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
-
-    print("importing vinfast news collection module...")
-
-    llm = ChatGroq(
-        api_key=GROQ_API_KEY,
-        model="qwen/qwen3.6-27b",  # verify exact model id — see note below
-        temperature=0,
-    )
-
-    print("Creating the agent...")
-    news_agent = create_agent(
-        model=llm,
-        tools=[summarise_dataframe],
-        system_prompt="You are a helpful news assistant who is always friendly. You are usually provided with a news report dataframe.",
-    )
-
-    print("Invoking the response...")
-    response = news_agent.invoke({
-        "messages": [
-            {"role": "user", "content": "Summarise the news reports about vinfast"}
-        ]
-    })
-
-    print("Showing the response...")
-    return response["messages"][-1].content
 
     
 if __name__ == "__main__": 
     
-    build_agent()
+    print (build_agent())
+
+
 
 
