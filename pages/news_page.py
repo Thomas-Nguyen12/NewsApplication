@@ -216,6 +216,7 @@ def summarise_vinfast_news_reports():
 
 
 # loading mistral api key
+@st.cache_data 
 def build_agent() -> str:
 
     GROQ_API_KEY = st.secrets['GROQ_API_KEY']
